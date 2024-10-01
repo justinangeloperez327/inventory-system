@@ -45,10 +45,9 @@ CREATE TABLE borrowed_items (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     item_id INT NOT NULL,
-    borrow_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    expected_return_date DATETIME DEFAULT NULL,
-    actual_return_date DATETIME DEFAULT NULL,
-    status ENUM('borrowed', 'returned') NOT NULL DEFAULT 'borrowed',
+    borrowed_date DATE,
+    borrowed_deadline DATE,
+    status ENUM('pending', 'approved') NOT NULL DEFAULT 'pending',
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     deleted_at DATETIME DEFAULT NULL,
@@ -61,9 +60,23 @@ CREATE TABLE returned_items (
     id INT AUTO_INCREMENT PRIMARY KEY,
     borrowed_item_id INT NOT NULL,
     return_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    condition_notes TEXT DEFAULT NULL,
+    status ENUM('pending', 'approved') NOT NULL DEFAULT 'pending',
+    user_id INT NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     deleted_at DATETIME DEFAULT NULL,
-    FOREIGN KEY (borrowed_item_id) REFERENCES borrowed_items(id) ON DELETE CASCADE
+    FOREIGN KEY (borrowed_item_id) REFERENCES borrowed_items(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE renewed_items (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    borrowed_item_id INT NOT NULL,
+    status ENUM('pending', 'approved') NOT NULL DEFAULT 'pending',
+    user_id INT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at DATETIME DEFAULT NULL,
+    FOREIGN KEY (borrowed_item_id) REFERENCES borrowed_items(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
