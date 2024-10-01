@@ -14,6 +14,7 @@ use core\Route;
 
 
 Route::get('/', [AuthController::class, 'login']);
+Route::get('login', [AuthController::class, 'login']);
 Route::post('login', [AuthController::class, 'login']);
 Route::get('logout', [AuthController::class, 'logout']);
 
@@ -53,3 +54,5 @@ Route::get('reports', [ReportController::class, 'index']);
 Route::get('reports/export-to-excel', [ReportController::class, 'exportToExcel']);
 
 Route::get('not-found', [ErrorController::class, 'notFound']);
+
+Route::get('create-admin-user', [AuthController::class, 'createAdminUser']);

@@ -33,7 +33,7 @@ CREATE TABLE users (
     username VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     name VARCHAR(255) NOT NULL,
-    role ENUM('admin', 'faculty', 'staff') NOT NULL DEFAULT 'faculty',
+    role ENUM('admin', 'faculty') NOT NULL DEFAULT 'faculty',
     last_login DATETIME DEFAULT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

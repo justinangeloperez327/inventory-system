@@ -53,4 +53,20 @@ class AuthController extends Controller
         Redirect::to('');
     }
 
+    public function createAdminUser()
+    {
+        $admin = User::findBy('role', 'admin');
+
+        if (!$admin) {
+            User::create([
+                'name' => 'Admin',
+                'username' => 'admin',
+                'password' => password_hash('admin', PASSWORD_DEFAULT),
+                'role' => 'admin'
+            ]);
+        }
+
+        Redirect::to('login');
+
+    }
 }

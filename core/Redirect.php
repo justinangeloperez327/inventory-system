@@ -18,7 +18,6 @@ class Redirect
         if ($message) {
             self::setFlash($message);
         }
-        header("Location: " . $_SERVER['HTTP_REFERER']);
         exit;
     }
 
