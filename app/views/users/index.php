@@ -16,7 +16,7 @@
                                 <h4>Users</h4>
                             </div>
                             <div class="col-auto">
-                                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addItemModal">New</button>
+                                <a class="btn btn-primary btn-sm" href="users/create" >New</a>
                             </div>
                         </div>
                     </div>

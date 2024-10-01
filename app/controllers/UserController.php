@@ -6,6 +6,7 @@ use app\Models\User;
 use core\Controller;
 use core\Redirect;
 use core\View;
+use Endroid\QrCode\Builder\Builder;
 
 class UserController extends Controller{
 
@@ -90,5 +91,18 @@ class UserController extends Controller{
         } else {
             View::render('users/index', ['message' => 'User not found!']);
         }
+    }
+
+    public function generateQRCode($id) {
+        $result = Builder::create()
+            ->data($id)
+            ->size(300)
+            ->margin(10)
+            ->build();
+        
+        header('Content-Type: ' . $result->getMimeType());
+        
+        // Output the QR code image
+        echo $result->getString();
     }
 }
