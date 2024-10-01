@@ -1,0 +1,28 @@
+
+body {
+    background-color: #FFFFFF;
+}
+
+.navbar {
+    background-color: #FFFFFF;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid #bfbfbf;
+}
+
+.navbar .nav-link {
+    color: #343A40;
+}
+
+.navbar .nav-link:hover {
+    color: #007BFF;
+}
+
+.card {
+    border: 1px solid #bfbfbf;
+    border-radius: 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+table button {
+    font-size: 0.7rem !important;
+}
