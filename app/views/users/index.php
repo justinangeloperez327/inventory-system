@@ -26,17 +26,24 @@
                                 <th>ID</th>
                                 <th>Username</th>
                                 <th>Name</th>
+                                <th>Role</th>
+                                <th>Qr Code</th>
                                 <th scope="col" width="10%">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php foreach ($users['data'] as $user): ?>
                                 <tr>
-                                    <td><?php echo ($user['id']); ?></td>
-                                    <td><?php echo ($user['username']); ?></td>
-                                    <td><?php echo ($user['name']); ?></td>
+                                    <td><?php echo $user['id']; ?></td>
+                                    <td><?php echo $user['username']; ?></td>
+                                    <td><?php echo $user['name']; ?></td>
+                                    <td><?php echo $user['role']; ?></td>
                                     <td>
-                                        
+                                        <img src="<?php echo $user['qr_code']; ?>" alt="QR Code" style="width: 3rem;" />
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger text-white btn-sm" onclick="generateQrCode(<?php echo $user['id']; ?>)">Generate QR</button>
+                                        <button type="button" class="btn btn-success text-white btn-sm" onclick="passwordReset(<?php echo $user['id']; ?>)">Password Reset</button>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -86,5 +93,40 @@
         </div>
     </div>
 </div>
+
+<?php endsection(); ?>
+
+<?php section('scripts'); ?>
+
+<script>
+    function generateQrCode(id) {
+        fetch('/generate-qr-code/' + id, {
+            method: 'GET'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.href = '/users';
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    function passwordReset(id) {
+        fetch('/password-reset/' + id, {
+            method: 'GET'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+            } else {
+                alert(data.message);
+            }
+        });
+    }
+</script>
 
 <?php endsection(); ?>

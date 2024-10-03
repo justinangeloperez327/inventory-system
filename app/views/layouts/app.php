@@ -40,18 +40,29 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/renewed-items">Renewed Items</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/users ">Users</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/reports ">Reports</a>
-                        </li>
+                        <?php if (admin()): ?>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/users ">Users</a>
+                            </li>
+                        <?php endif; ?>
+                        <?php if (admin()): ?>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/reports ">Reports</a>
+                            </li>
+                        <?php endif; ?>
                     <?php endif; ?>
                     </ul>
-                    <ul class="navbar-nav  ms-auto">
+                    <ul class="navbar-nav ms-auto">
                         <?php if (authenticated()): ?>
-                        <li>
-                            <a class="nav-link" href="/logout">Logout</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <?php echo userName(); ?>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li><a class="dropdown-item" href="/profile">Profile</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                            </ul>
                         </li>
                         <?php endif; ?>
                     </ul>

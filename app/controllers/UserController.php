@@ -5,6 +5,7 @@ namespace app\Controllers;
 use app\Models\User;
 use core\Controller;
 use core\Redirect;
+use core\Response;
 use core\View;
 use Endroid\QrCode\Builder\Builder;
 
@@ -18,7 +19,7 @@ class UserController extends Controller{
     }
     
     public function index() {
-        $users = User::orderby('id', 'desc')->paginate(10);
+        $users = User::orderby('id', 'desc')->where('id', '!=', 1)->paginate(10);
 
         View::render('users/index', ['users' => $users]);
     }
@@ -65,7 +66,7 @@ class UserController extends Controller{
         if ($user) {
             User::update($id, [
                 'name' => $_POST['name'],
-                'email' => $_POST['email']
+                'username' => $_POST['username']
             ]);
             Redirect::back('users');
         } else {
@@ -93,16 +94,17 @@ class UserController extends Controller{
         }
     }
 
-    public function generateQRCode($id) {
-        $result = Builder::create()
-            ->data($id)
-            ->size(300)
-            ->margin(10)
-            ->build();
+    public function passwordReset($id) {
+        $user = User::find($id);
+
+        if (!$user) {
+            Response::json(['success' => false, 'message' => 'User not found!'], 404);
+        }
+
+        User::update($id, [
+            'password' => password_hash(1, PASSWORD_DEFAULT)
+        ]);
         
-        header('Content-Type: ' . $result->getMimeType());
-        
-        // Output the QR code image
-        echo $result->getString();
+        Response::json(['success' => true, 'message' => 'Password reset successfully']);
     }
 }

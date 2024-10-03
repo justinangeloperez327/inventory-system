@@ -17,22 +17,18 @@ class AuthController extends Controller
             $username = $_POST['username'];
             $password = $_POST['password'];
 
-            try {
-                $user = User::findBy('username', $username);
+            $user = User::findBy('username', $username);
 
-                if (!$user || !password_verify($password, $user['password'])) {
-                    Redirect::back('Wrong username or password');
-                }
-
-                Session::set('authenticated', true);
-                Session::set('user_id', $user['id']);
-                Session::set('user_role', $user['role']);
-                Session::set('user_name', $user['name']);
-
-                Redirect::to('dashboard');
-            } catch (Exception $e) {
-                Redirect::back('Error logging in: ' . $e->getMessage());
+            if (!$user || !password_verify($password, $user['password'])) {
+                Redirect::back('Wrong username or password');
             }
+
+            Session::set('authenticated', true);
+            Session::set('user_id', $user['id']);
+            Session::set('user_role', $user['role']);
+            Session::set('user_name', $user['name']);
+
+            Redirect::to('dashboard');
         } else {
             if (authenticated()) {
                 $user = Session::get('user');

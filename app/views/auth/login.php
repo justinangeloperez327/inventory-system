@@ -8,11 +8,11 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-4">
-            <?php if (flash()): ?>
-                <div class="alert alert-warning">
-                    <?php echo (flash()); ?>
-                </div>
-            <?php endif; ?>
+                <?php if ($flashMessage = \core\Redirect::getFlash()): ?>
+                    <div class="alert alert-warning">
+                        <?php echo ($flashMessage); ?>
+                    </div>
+                <?php endif; ?>
             <div class="card">
                 <div class="card-body">
                     <div class="card-title text-center">

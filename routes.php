@@ -1,15 +1,18 @@
 <?php
 
-use app\Controllers\AuthController;
-use app\Controllers\BorrowedItemController;
-use app\Controllers\CategoryController;
-use app\Controllers\DashboardController;
-use App\Controllers\ErrorController;
-use app\Controllers\ItemController;
-use app\Controllers\RenewedItemController;
-use App\Controllers\ReportController;
-use app\Controllers\ReturnedItemController;
 use app\Controllers\UserController;
+use app\Controllers\ReturnedItemController;
+use app\Controllers\RenewedItemController;
+use app\Controllers\QrCodeController;
+use app\Controllers\ProfileController;
+use app\Controllers\ItemController;
+use app\Controllers\DashboardController;
+use app\Controllers\CategoryController;
+use app\Controllers\BorrowedItemController;
+use app\Controllers\AuthController;
+use app\Controllers\AttendanceController;
+use App\Controllers\ReportController;
+use App\Controllers\ErrorController;
 use core\Route;
 
 
@@ -56,3 +59,13 @@ Route::get('reports/export-to-excel', [ReportController::class, 'exportToExcel']
 Route::get('not-found', [ErrorController::class, 'notFound']);
 
 Route::get('create-admin-user', [AuthController::class, 'createAdminUser']);
+
+Route::get('profile', [ProfileController::class, 'profile']);
+Route::post('profile/{id}/update-name', [ProfileController::class, 'updateName']);
+Route::post('profile/{id}/update-password', [ProfileController::class, 'updatePassword']);
+
+Route::get('generate-qr-code/{id}', [QrCodeController::class, 'generate']);
+Route::get('password-reset/{id}', [UserController::class, 'passwordReset']);
+
+Route::get('attendance-scanner', [AttendanceController::class, 'index']);
+Route::post('attendance', [AttendanceController::class, 'capture']);

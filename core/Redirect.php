@@ -18,6 +18,7 @@ class Redirect
         if ($message) {
             self::setFlash($message);
         }
+        header("Location: /");
         exit;
     }
 
