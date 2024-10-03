@@ -1,4 +1,7 @@
-
+.dark-mode {
+    background-color: #343A40;
+    color: #FFFFFF;
+}
 body {
     background-color: #FFFFFF;
 }

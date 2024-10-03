@@ -71,6 +71,7 @@
                                                     data-id="<?php echo $ri['id']; ?>"
                                                     data-item-id="<?php echo $ri['item_id']; ?>"
                                                     data-borrowed-item-id="<?php echo ($ri['borrowed_item_id']); ?>"
+                                                    data-item-name="<?php echo ($ri['item_name']); ?>"
                                                     data-status="<?php echo ($ri['status']); ?>"
                                                     data-returned-date="<?php echo ($ri['returned_date']); ?>"
                                                 >
@@ -140,13 +141,10 @@
             <div class="modal-body">
                 <form id="editReturnedItemForm">
                     <input type="hidden" id="editReturnedItemId" name="id">
+                    <input type="hidden" id="editReturnedItemItemId" name="borrowed_item_id">
                     <div class="mb-3">
-                        <label for="editReturnedItemItemId" class="form-label">Item</label>
-                        <select class="form-control" id="editReturnedItemItemId" name="item_id" disabled>
-                            <?php foreach ($items as $item): ?>
-                                <option value="<?php echo $item['id']; ?>"><?php echo ($item['name']); ?></option>
-                            <?php endforeach; ?>
-                        </select>
+                        <label for="editReturnedItemItemName" class="form-label">Item</label>
+                        <input type="text" class="form-control" id="editReturnedItemItemName" name="item_name" disabled>
                     </div>
                     <div class="mb-3">
                         <label for="editReturnedItemStatus" class="form-label">Status</label>
@@ -172,20 +170,24 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var editReturnedItemModal = document.getElementById('editReturnedItemModal');
+
         editReturnedItemModal.addEventListener('show.bs.modal', function (event) {
             var button = event.relatedTarget;
             var id = button.getAttribute('data-id');
             var status = button.getAttribute('data-status');
             var returnedDate = button.getAttribute('data-returned-date');
             var itemId = button.getAttribute('data-item-id');
+            var itemName = button.getAttribute('data-item-name');
             var modal = this;
             modal.querySelector('#editReturnedItemId').value = id;
             modal.querySelector('#editReturnedItemItemId').value = itemId;
             modal.querySelector('#editReturnedItemStatus').value = status;
             modal.querySelector('#editReturnedItemReturnedDate').value = returnedDate;
+            modal.querySelector('#editReturnedItemItemName').value = itemName;
         });
 
         var editReturnedItemForm = document.getElementById('editReturnedItemForm');
+        
         editReturnedItemForm.addEventListener('submit', function (event) {
             event.preventDefault();
             var formData = new FormData(editReturnedItemForm);

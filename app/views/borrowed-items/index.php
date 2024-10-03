@@ -76,6 +76,7 @@
                                                 data-bs-target="#editBorrowedItemModal"
                                                 data-id="<?php echo $bi['id']; ?>"
                                                 data-item-id="<?php echo ($bi['item_id']); ?>"
+                                                data-item-name="<?php echo ($bi['item_name']); ?>"
                                                 data-status="<?php echo ($bi['status']); ?>"
                                                 data-borrowed-date="<?php echo ($bi['borrowed_date']); ?>"
                                                 data-borrowed-deadline="<?php echo ($bi['borrowed_deadline']); ?>"
@@ -169,13 +170,10 @@
             <div class="modal-body">
                 <form id="editBorrowedItemForm">
                     <input type="hidden" id="editBorrowedItemId" name="id">
+                    <input type="hidden" id="editBorrowedItemItemId" name="item_id">
                     <div class="mb-3">
-                        <label for="editBorrowedItemItemId" class="form-label">Item</label>
-                        <select class="form-control" id="editBorrowedItemItemId" name="item_id" required disabled>
-                            <?php foreach ($items as $item): ?>
-                                <option value="<?php echo $item['id']; ?>"><?php echo ($item['name']); ?></option>
-                            <?php endforeach; ?>
-                        </select>
+                        <label for="editBorrowedItemItemName" class="form-label">Item</label>
+                        <input class="form-control" type="text" id="editBorrowedItemItemName" disabled>
                     </div>
                     <div class="mb-3">
                         <label for="editBorrowedItemStatus" class="form-label">Status</label>
@@ -258,6 +256,7 @@
             var button = event.relatedTarget;
             var id = button.getAttribute('data-id');
             var itemId = button.getAttribute('data-item-id');
+            var itemName = button.getAttribute('data-item-name');
             var status = button.getAttribute('data-status');
             var borrowedDate = button.getAttribute('data-borrowed-date');
             var borrowedDeadline = button.getAttribute('data-borrowed-deadline');
@@ -265,6 +264,7 @@
             var modal = this;
             modal.querySelector('#editBorrowedItemId').value = id;
             modal.querySelector('#editBorrowedItemItemId').value = itemId;
+            modal.querySelector('#editBorrowedItemItemName').value = itemName;
             modal.querySelector('#editBorrowedItemStatus').value = status;
             modal.querySelector('#editBorrowedItemBorrowedDate').value = borrowedDate;
             modal.querySelector('#editBorrowedItemBorrowedDeadline').value = borrowedDeadline;

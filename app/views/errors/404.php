@@ -6,28 +6,44 @@
     <title>404 Not Found</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #1e1e1e, #3e3e3e);
+            color: #f8f9fa;
+            font-family: monospace, sans-serif;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             text-align: center;
-            padding: 50px;
         }
-        h1 {
-            font-size: 50px;
+        .container {
+            max-width: 600px;
+            padding: 20px;
         }
-        p {
-            font-size: 20px;
+        .title {
+            font-size: 6rem;
+            margin-bottom: 2rem;
         }
-        a {
-            color: #007BFF;
+        .message {
+            font-size: 3rem;
+            margin-bottom: 4rem;
+        }
+        .link {
+            color: #3490dc;
             text-decoration: none;
+            font-weight: bold;
+            font-size: 2.5rem;
         }
-        a:hover {
+        .link:hover {
             text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <h1>404</h1>
-    <p>Oops! The page you are looking for does not exist.</p>
-    <p><a href="/">Go back to the homepage</a></p>
+    <div class="container">
+        <div class="title">404</div>
+        <div class="message">Sorry, the page you are looking for could not be found.</div>
+        <div><a href="/" class="link">Go back to the Homepage</a></div>
+    </div>
 </body>
 </html>

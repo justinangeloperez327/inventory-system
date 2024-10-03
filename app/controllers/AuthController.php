@@ -37,9 +37,9 @@ class AuthController extends Controller
             if (authenticated()) {
                 $user = Session::get('user');
                 if ($user['role'] === 'admin') {
-                    Redirect::to('admin-dashboard');
+                    Redirect::to('dashboard');
                 } else {
-                    Redirect::to('user-dashboard');
+                    Redirect::to('dashboard');
                 }
             } else {
                 View::render('auth/login');

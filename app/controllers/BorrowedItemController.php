@@ -130,9 +130,10 @@ class BorrowedItemController extends Controller
         }
     }
 
-    private function getItemQuantity($id)
+    private function getItemQuantity(int $itemId)
     {
-        $item = Item::find($id);
+        $item = Item::find($itemId);
+
         $quantity = $item['quantity'];
 
         if ($quantity < 1) {

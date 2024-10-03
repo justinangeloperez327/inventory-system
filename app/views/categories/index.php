@@ -105,7 +105,8 @@
                     </div>
                     <div class="mb-3">
                         <label for="itemCategory" class="form-label">Parent</label>
-                        <select class="form-control" id="itemCategory" name="parent_id" required>
+                        <select class="form-control" id="itemCategory" name="parent_id">
+                            <option value=""></option>
                             <?php foreach ($parents as $parent): ?>
                                 <option value="<?php echo $parent['id']; ?>"><?php echo ($parent['name']); ?></option>
                             <?php endforeach; ?>
