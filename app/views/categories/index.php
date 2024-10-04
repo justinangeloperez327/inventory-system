@@ -37,7 +37,7 @@
                                     <td><?php echo ($category['name']); ?></td>
                                     <td><?php echo ($category['parent_name']); ?></td>
                                     <td>
-                                        <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editCategoryModal" data-id="<?php echo $category['id']; ?>" data-name="<?php echo ($category['name']); ?>" data-parent-id="<?php echo ($category['category_id']); ?>">Edit</button>
+                                        <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editCategoryModal" data-id="<?php echo $category['id'];?>" data-name="<?php echo$category['name']; ?>" data-parent-id="<?php echo $category['parent_id']; ?>">Edit</button>
                                         <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteCategoryModal" data-id="<?php echo $category['id']; ?>">Delete</button>
                                     </td>
                                 </tr>
@@ -135,9 +135,8 @@
                         <input type="text" class="form-control" id="editCategoryName" name="name" required>
                     </div>
                     <div class="mb-3">
-                        <label for="editCategoryParentId" class="form-label">Category</label>
-                        <select class="form-control" id="editCategoryParentId" name="parent_id" required>
-                            <option value="" disabled></option>
+                        <label for="editCategoryParentId" class="form-label">Parent</label>
+                        <select class="form-control" id="editCategoryParentId" name="parent_id">
                             <?php foreach ($parents as $parent): ?>
                                 <option value="<?php echo $parent['id']; ?>"><?php echo ($parent['name']); ?></option>
                             <?php endforeach; ?>

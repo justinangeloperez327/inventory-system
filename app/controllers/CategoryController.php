@@ -32,7 +32,7 @@ class CategoryController extends Controller
     public function create() {
         try {
             $name = $_POST['name'];
-            $parentId = $_POST['parent_id'] ? $_POST['parent_id'] : null;
+            $parentId = isset($_POST['parent_id']) ? $_POST['parent_id'] : null;
 
             Category::create([
                 'name' => $name,
@@ -51,7 +51,7 @@ class CategoryController extends Controller
             if ($item) {
 
                 $name = $_POST['name'];
-                $parentId = $_POST['parent_id'] ? $_POST['parent_id'] : null;
+                $parentId = isset($_POST['parent_id']) ? $_POST['parent_id'] : null;
 
                 Category::update($id, [
                     'name' => $name,
