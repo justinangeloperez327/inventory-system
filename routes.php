@@ -68,6 +68,6 @@ Route::get('generate-qr-code/{id}', [QrCodeController::class, 'generate']);
 Route::get('password-reset/{id}', [UserController::class, 'passwordReset']);
 
 Route::get('attendance-scanner', [AttendanceScannerController::class, 'index']);
-Route::post('attendace-capture', [AttendanceScannerController::class, 'capture']);
+Route::post('attendance-capture', [AttendanceScannerController::class, 'capture']);
 
 Route::get('attendance', [AttendanceController::class, 'index']);

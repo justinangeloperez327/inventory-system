@@ -67,7 +67,7 @@
                         </li>
                         <?php else: ?>
                             <li class="nav-item">
-                                <a class="nav-link" href="/attendance-scanner ">Attendace</a>
+                                <a class="nav-link" href="/attendance-scanner ">Attendance</a>
                             </li>
                         <?php endif; ?>
                     </ul>

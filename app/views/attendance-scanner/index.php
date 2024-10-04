@@ -10,10 +10,10 @@
         <div class="col-md-6">
             <div class="text-center mb-2  fs-1">
                 <span id="success-message" class="text-success" hidden>
-                    Attendance captured successfully
+                    
                 </span>
                 <span id="error-message" class="text-danger" hidden>
-                    Error capturing attendance
+                    Failed to capture attendance. Please try again.
                 </span>
             </div>
             <div class="card">
@@ -46,6 +46,7 @@
     const successMessage = document.getElementById("success-message");
 
     let videoStream = null;
+    let processingQRCode = false; // Flag to track QR code processing state
 
     // Check if navigator.mediaDevices is available
     if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
@@ -69,7 +70,7 @@
 
         // Function to scan video stream for QR codes
         function tick() {
-            if (video.readyState === video.HAVE_ENOUGH_DATA) {
+            if (video.readyState === video.HAVE_ENOUGH_DATA && !processingQRCode) {
                 canvasElement.height = video.videoHeight;
                 canvasElement.width = video.videoWidth;
                 canvas.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
@@ -80,12 +81,12 @@
                 });
 
                 if (code) {
-                    
+                    processingQRCode = true; // Set flag to true to block further submissions
                     submitQrCode(code.data);
-                
-                    setTimeout(() => {
                     
-                        initCameraSelection();
+                    // After 5 seconds, allow another QR code to be processed
+                    setTimeout(() => {
+                        processingQRCode = false;
                     }, 5000);
                 }
             }
@@ -128,8 +129,12 @@
             .then(data => {
                 if (data.success) {
                     successMessage.hidden = false;
+                    stopVideo();
+
                     setTimeout(() => {
+                        successMessage.innerText = data.message;
                         successMessage.hidden = true;
+                        initCameraSelection();
                     }, 5000);
                 } else {
                     errorMessage.hidden = false;
@@ -150,4 +155,5 @@
         initCameraSelection();
     }
 </script>
+
 <?php endsection(); ?>

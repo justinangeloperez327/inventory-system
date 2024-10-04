@@ -25,23 +25,40 @@ class AttendanceScannerController extends Controller
         
         $today = date('Y-m-d');
 
-        $attendance = Attendance::where('user_id', $user->id)
-            ->where('date', $today)
+        $attendance = Attendance::where('user_id', '=', $user['id'])
+            ->where('date', '=',$today)
             ->first();
 
         if (!$attendance) {
+
             Attendance::create([
-                'user_id' => $user->id,
+                'user_id' => $user['id'],
                 'date' => date('Y-m-d'),
                 'time_in' => date('H:i:s'),
-                'time_out' => null,
+            ]);
+
+            Response::json([
+                'success' => true, 
+                'message' => 'Time in successfully', 
+                'attendance' => $attendance
             ]);
         } else {
-            Attendance::update($attendance['id'],[
+
+            $attendance = Attendance::where('user_id', '=', $user['id'])
+                ->where('date', '=',$today)
+                ->first();
+
+            Attendance::update($attendance['id'], [
                 'time_out' => date('H:i:s'),
-            ]); 
+            ]);
+
+            Response::json([
+                'success' => true, 
+                'message' => 'Time out successfully', 
+                'attendance' => $attendance
+            ]);
         }
 
-        Response::json(['success' => true, 'message' => 'Attendance captured successfully', 'data' => ['user' => $attendance]]);
+       
     }
 }
