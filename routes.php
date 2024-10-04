@@ -11,6 +11,7 @@ use app\Controllers\CategoryController;
 use app\Controllers\BorrowedItemController;
 use app\Controllers\AuthController;
 use app\Controllers\AttendanceController;
+use app\Controllers\AttendanceScannerController;
 use App\Controllers\ReportController;
 use App\Controllers\ErrorController;
 use core\Route;
@@ -22,7 +23,7 @@ Route::post('login', [AuthController::class, 'login']);
 Route::get('logout', [AuthController::class, 'logout']);
 
 Route::get('dashboard', [DashboardController::class, 'index']);
-// Define item routes
+
 Route::get('items', [ItemController::class, 'index']);
 Route::post('items', [ItemController::class, 'create']);
 Route::post('items/{id}', [ItemController::class, 'update']);
@@ -34,7 +35,6 @@ Route::post('borrowed-items/{id}/update', [BorrowedItemController::class, 'updat
 Route::post('borrowed-items/{id}/delete', [BorrowedItemController::class, 'delete']);
 
 Route::get('returned-items', [ReturnedItemController::class, 'index']);
-
 Route::get('returned-items/{id}', [ReturnedItemController::class, 'create']);
 Route::post('returned-items/{id}/update', [ReturnedItemController::class, 'update']);
 
@@ -67,5 +67,7 @@ Route::post('profile/{id}/update-password', [ProfileController::class, 'updatePa
 Route::get('generate-qr-code/{id}', [QrCodeController::class, 'generate']);
 Route::get('password-reset/{id}', [UserController::class, 'passwordReset']);
 
-Route::get('attendance-scanner', [AttendanceController::class, 'index']);
-Route::post('attendance', [AttendanceController::class, 'capture']);
+Route::get('attendance-scanner', [AttendanceScannerController::class, 'index']);
+Route::post('attendace-capture', [AttendanceScannerController::class, 'capture']);
+
+Route::get('attendance', [AttendanceController::class, 'index']);

@@ -120,7 +120,7 @@
             const formData = new FormData();
             formData.append('qrCodeData', qrCodeData);
 
-            fetch('/attendance', {
+            fetch('/attendance-capture', {
                 method: 'POST',
                 body: formData,
             })

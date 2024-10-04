@@ -2,26 +2,31 @@
 
 namespace app\Controllers;
 
-use app\Models\User;
+use app\Models\Attendance;
 use core\Controller;
-use core\Response;
+use core\Redirect;
 use core\View;
 
 class AttendanceController extends Controller
 {
+    public function __construct()
+    {
+        if (!authenticated()) {
+            Redirect::to('not-found');
+        }
+    }
+    
     public function index()
     {
-        View::render('attendance/camera-scanner');
-    }
+        $attendance = Attendance::leftJoin('users', 'attendance.user_id', '=', 'users.id')
+            ->select([
+                'attendance.*',
+                'users.name AS user_name',
+            ])
+            ->paginate(10);
 
-    public function capture()
-    {
-        $attendance = User::findBy('id', $_POST['qrCodeData']);
-
-        if (!$attendance) {
-            Response::json(['success' => false, 'message' => 'User not found'], 404);
-        }
-
-        Response::json(['success' => true, 'message' => 'Attendance captured successfully', 'data' => ['user' => $attendance]]);
+        View::render('attendance/index', [
+            'attendance' => $attendance,
+        ]);
     }
 }

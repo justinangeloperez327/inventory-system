@@ -44,8 +44,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="/users ">Users</a>
                             </li>
-                        <?php endif; ?>
-                        <?php if (admin()): ?>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/attendance ">Attendance</a>
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="/reports ">Reports</a>
                             </li>
