@@ -94,7 +94,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addCategoryModalLabel">Add Item</h5>
+                <h5 class="modal-title" id="addCategoryModalLabel">Add Category</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -106,7 +106,7 @@
                     <div class="mb-3">
                         <label for="itemCategory" class="form-label">Parent</label>
                         <select class="form-control" id="itemCategory" name="parent_id">
-                            <option value=""></option>
+                            <option value"" selected disabled></option>
                             <?php foreach ($parents as $parent): ?>
                                 <option value="<?php echo $parent['id']; ?>"><?php echo ($parent['name']); ?></option>
                             <?php endforeach; ?>
@@ -124,7 +124,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editCategoryModalLabel">Edit Item</h5>
+                <h5 class="modal-title" id="editCategoryModalLabel">Edit Category</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -135,8 +135,9 @@
                         <input type="text" class="form-control" id="editCategoryName" name="name" required>
                     </div>
                     <div class="mb-3">
-                        <label for="editCategoryParentId" class="form-label">Parent</label>
+                        <label for="editCategoryParentId" class="form-label">Category</label>
                         <select class="form-control" id="editCategoryParentId" name="parent_id" required>
+                            <option value="" disabled></option>
                             <?php foreach ($parents as $parent): ?>
                                 <option value="<?php echo $parent['id']; ?>"><?php echo ($parent['name']); ?></option>
                             <?php endforeach; ?>
