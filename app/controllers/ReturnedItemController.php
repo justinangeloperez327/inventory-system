@@ -2,6 +2,7 @@
 
 namespace app\Controllers;
 
+use app\Models\BorrowedItem;
 use app\Models\Item;
 use app\Models\ReturnedItem;
 use core\Controller;
@@ -63,13 +64,20 @@ class ReturnedItemController extends Controller
 
     public function update($id) {
         try {
-            $item = ReturnedItem::find($id);
-            if ($item) {
-
+            $returnedItem = ReturnedItem::find($id);
+            if ($returnedItem) {
+                $borrowedItem = BorrowedItem::find($returnedItem['borrowed_item_id']);
+                $item = Item::find($borrowedItem['item_id']);
                 ReturnedItem::update($id, [
                     'returned_date' => $_POST['returned_date'],
                     'status' => $_POST['status'],
                 ]);
+
+                if ($_POST['status'] == 'approved') {
+                    Item::update($item['id'], [
+                        'quantity' => $item['quantity'] + 1,
+                    ]);
+                }
 
                 Response::json(['success' => true, 'message' => 'Item updated successfully']);
             } else {
@@ -84,7 +92,7 @@ class ReturnedItemController extends Controller
         try {
             $item = ReturnedItem::find($id);
             if ($item) {
-                returnedItem::delete($id);
+                ReturnedItem::delete($id);
                 Response::json(['success' => true, 'message' => 'Item deleted successfully']);
             } else {
                 Response::json(['success' => false, 'message' => 'Item not found'], 404);
