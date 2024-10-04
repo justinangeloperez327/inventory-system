@@ -71,6 +71,7 @@ class RenewedItemController
             RenewedItem::create([
                 'borrowed_item_id' => $id,
                 'status' => 'pending',
+                'user_id' => userId(),
             ]);
 
             Response::json(['success' => true, 'message' => 'Item added successfully']);
