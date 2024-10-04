@@ -31,9 +31,12 @@ class CategoryController extends Controller
 
     public function create() {
         try {
+            $name = $_POST['name'];
+            $parentId = $_POST['parent_id'] ? $_POST['parent_id'] : null;
+
             Category::create([
-                'name' => $_POST['name'],
-                'parent_id' => $_POST['parent_id'] ?? null
+                'name' => $name,
+                'parent_id' => $parentId,
             ]);
 
             Response::json(['success' => true, 'message' => 'Category added successfully']);
@@ -47,9 +50,12 @@ class CategoryController extends Controller
             $item = Category::find($id);
             if ($item) {
 
+                $name = $_POST['name'];
+                $parentId = $_POST['parent_id'] ? $_POST['parent_id'] : null;
+
                 Category::update($id, [
-                    'name' => $_POST['name'],
-                    'parent_id' => $_POST['parent_id'] ?? null
+                    'name' => $name,
+                    'parent_id' => $parentId,
                 ]);
 
                 Response::json(['success' => true, 'message' => 'Category updated successfully']);
