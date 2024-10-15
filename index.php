@@ -2,7 +2,6 @@
 
 require 'vendor/autoload.php'; // Ensure this path is correct
 
-
 // Autoloader: Automatically load all classes
 spl_autoload_register(function ($class) {
     $class = str_replace('\\', DIRECTORY_SEPARATOR, $class);

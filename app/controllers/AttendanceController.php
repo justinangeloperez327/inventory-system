@@ -19,6 +19,7 @@ class AttendanceController extends Controller
     public function index()
     {
         $attendance = Attendance::leftJoin('users', 'attendance.user_id', '=', 'users.id')
+            ->where('created_at', '>=', today())
             ->select([
                 'attendance.*',
                 'users.name AS user_name',

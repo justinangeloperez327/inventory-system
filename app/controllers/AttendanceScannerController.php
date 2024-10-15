@@ -30,7 +30,7 @@ class AttendanceScannerController extends Controller
             ->first();
 
         if (!$attendance) {
-
+            
             Attendance::create([
                 'user_id' => $user['id'],
                 'date' => date('Y-m-d'),

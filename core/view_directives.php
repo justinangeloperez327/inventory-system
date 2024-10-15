@@ -1,5 +1,7 @@
 <?php
 
+date_default_timezone_set('Asia/Manila');
+
 // Global helper to set the layout
 function layout($layout)
 {
@@ -63,3 +65,12 @@ function flash()
     }
 }
 
+function today()
+{
+    return date('Y-m-d');
+}
+
+function now()
+{
+    return date('Y-m-d H:i:s');
+}

@@ -31,7 +31,9 @@ class ReportController extends Controller {
                 'users.name AS user_name',
                 'borrowed_items.borrowed_date',
             ])
-            ->where('returned_items.status', '=', 'approved')->get();
+            ->where('returned_items.status', '=', 'approved')
+            ->where('returned_items.returned_date', '>=', today())
+            ->get();
 
         View::render('reports/index', [
             'returnedItems' => $returnedItems,
