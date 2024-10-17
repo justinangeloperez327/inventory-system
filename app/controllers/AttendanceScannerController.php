@@ -26,39 +26,40 @@ class AttendanceScannerController extends Controller
         $today = date('Y-m-d');
 
         $attendance = Attendance::where('user_id', '=', $user['id'])
-            ->where('date', '=',$today)
+            ->where('date', '=', $today)
             ->first();
 
-        if (!$attendance) {
-            
-            Attendance::create([
-                'user_id' => $user['id'],
-                'date' => date('Y-m-d'),
-                'time_in' => date('H:i:s'),
-            ]);
-
-            Response::json([
-                'success' => true, 
-                'message' => 'Time in successfully', 
-                'attendance' => $attendance
-            ]);
-        } else {
-
+        if ($attendance) {
             $attendance = Attendance::where('user_id', '=', $user['id'])
-                ->where('date', '=',$today)
+                ->where('date', '=', $today)
+                ->whereNotNull('time_in')
                 ->first();
 
-            Attendance::update($attendance['id'], [
-                'time_out' => date('H:i:s'),
-            ]);
+            if ($attendance) {
+                Attendance::update($attendance['id'], [
+                    'time_out' => date('H:i:s'),
+                ]);
+    
+                Response::json([
+                    'success' => true, 
+                    'message' => 'Time out successfully', 
+                    'attendance' => $attendance
+                ]);
 
-            Response::json([
-                'success' => true, 
-                'message' => 'Time out successfully', 
-                'attendance' => $attendance
-            ]);
+            }
         }
+        
+        //time in
+        Attendance::create([
+            'user_id' => $user['id'],
+            'date' => date('Y-m-d'),
+            'time_in' => date('H:i:s'),
+        ]);
 
-       
+        Response::json([
+            'success' => true, 
+            'message' => 'Time in successfully', 
+            'attendance' => $attendance
+        ]);
     }
 }

@@ -184,10 +184,6 @@
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="editBorrowedItemBorrowedDate" class="form-label">Borrowed Date</label>
-                        <input type="date" class="form-control" id="editBorrowedItemBorrowedDate" name="borrowed_date" required>
-                    </div>
-                    <div class="mb-3">
                         <label for="editBorrowedItemBorrowedDeadline" class="form-label">Borrowed Deadline</label>
                         <input type="date" class="form-control" id="editBorrowedItemBorrowedDeadline" name="borrowed_deadline" required>
 
@@ -251,6 +247,20 @@
     }
 
     document.addEventListener('DOMContentLoaded', function () {
+        var statusSelect = document.getElementById('editBorrowedItemStatus');
+        var borrowedDeadlineInput = document.getElementById('editBorrowedItemBorrowedDeadline');
+
+        function toggleDeadlineContainer() {
+            if (statusSelect.value === 'approved') {
+                borrowedDeadlineInput.style.display = 'block';
+            } else {
+                borrowedDeadlineInput.style.display = 'none';
+            }
+        }
+
+        statusSelect.addEventListener('change', toggleDeadlineContainer);
+        toggleDeadlineContainer(); // Initial check
+
         var editBorrowedItemModal = document.getElementById('editBorrowedItemModal');
         editBorrowedItemModal.addEventListener('show.bs.modal', function (event) {
             var button = event.relatedTarget;

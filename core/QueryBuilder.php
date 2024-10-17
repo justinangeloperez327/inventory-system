@@ -39,6 +39,16 @@ class QueryBuilder
         return $this;
     }
 
+    public function whereNotNull($field)
+    {
+        // If field doesn't contain a table reference, prepend main table name
+        if (strpos($field, '.') === false) {
+            $field = $this->table . '.' . $field;
+        }
+        $this->conditions[] = "$field IS NOT NULL";
+        return $this;
+    }
+
     public function where($field, $operator, $value)
     {
         // If field doesn't contain a table reference, prepend main table name

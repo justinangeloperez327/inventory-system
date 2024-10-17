@@ -92,7 +92,7 @@ class BorrowedItemController extends Controller
                 
                 BorrowedItem::update($id, [
                     'item_id' => $_POST['item_id'],
-                    'borrowed_date' => $_POST['borrowed_date'],
+                    'borrowed_date' => today(),
                     'status' => 'approved',
                     'borrowed_deadline' => $_POST['borrowed_deadline'],
                 ]);

@@ -13,7 +13,7 @@
                     
                 </span>
                 <span id="error-message" class="text-danger" hidden>
-                    Failed to capture attendance. Please try again.
+
                 </span>
             </div>
             <div class="card">
@@ -127,23 +127,28 @@
             })
             .then(response => response.json())
             .then(data => {
+                stopVideo();
                 if (data.success) {
-                    successMessage.hidden = false;
-                    stopVideo();
-
+                    errorMessage.hidden = true;
                     setTimeout(() => {
                         successMessage.innerText = data.message;
-                        successMessage.hidden = true;
+                        successMessage.hidden = false;
+
                         initCameraSelection();
                     }, 5000);
+                    successMessage.hidden = true;
                 } else {
                     errorMessage.hidden = false;
                     setTimeout(() => {
-                        errorMessage.hidden = true;
+                        errorMessage.innerText = data.message;
+                        successMessage.hidden = true;
+
+                        initCameraSelection();
                     }, 5000);
                 }
             })
             .catch(error => {
+                successMessage.innerText = error;
                 errorMessage.hidden = false;
                 setTimeout(() => {
                     errorMessage.hidden = true;
