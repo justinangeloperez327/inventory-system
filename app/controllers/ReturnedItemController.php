@@ -68,14 +68,20 @@ class ReturnedItemController extends Controller
             if ($returnedItem) {
                 $borrowedItem = BorrowedItem::find($returnedItem['borrowed_item_id']);
                 $item = Item::find($borrowedItem['item_id']);
-                ReturnedItem::update($id, [
-                    'returned_date' => $_POST['returned_date'],
-                    'status' => $_POST['status'],
-                ]);
+
 
                 if ($_POST['status'] == 'approved') {
+                    ReturnedItem::update($id, [
+                        'returned_date' => today(),
+                        'status' => $_POST['status'],
+                    ]);
+                    
                     Item::update($item['id'], [
                         'quantity' => $item['quantity'] + 1,
+                    ]);
+                } else {
+                    ReturnedItem::update($id, [
+                        'status' => $_POST['status'],
                     ]);
                 }
 

@@ -12,12 +12,15 @@
                 
                 <div class="card-body">
                 <div class="card-title">
-                    <div class="row align-items-center">
-                        <div class="col text-left">
-                            <h4>Attendace</h4>
+                        <div class="row align-items-center">
+                            <div class="col text-left">
+                                <h4>Attendance</h4>
+                            </div>
+                            <div class="col-auto">
+                                <button type="button" class="btn btn-success btn-sm" onclick="handleExportToExcel()">Export to Excel</button>
+                            </div>
                         </div>
                     </div>
-                </div>
                     <table class="table table-sm table-responsive text-sm">
                         <thead>
                             <tr>
@@ -85,4 +88,30 @@
     </div>
 </div>
 
+<?php endsection(); ?>
+<?php section('scripts'); ?>
+<script>
+    function handleExportToExcel()
+    {
+        fetch('/attendance/export-to-excel', {
+            method: 'GET'
+        }).then(response => {
+            if (response.ok) {
+                return response.blob();
+            }
+            throw new Error('Network response was not ok.');
+        })
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = 'attendance.xlsx';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+        })
+        .catch(error => console.error('There was a problem with the fetch operation:', error));
+    }
+</script>
 <?php endsection(); ?>

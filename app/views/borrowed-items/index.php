@@ -183,10 +183,9 @@
                             <option value="rejected">Reject</option>
                         </select>
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-3" id="deadlineContainer">
                         <label for="editBorrowedItemBorrowedDeadline" class="form-label">Borrowed Deadline</label>
                         <input type="date" class="form-control" id="editBorrowedItemBorrowedDeadline" name="borrowed_deadline" required>
-
                     </div>
                     <button type="submit" class="btn btn-primary btn-sm">Save Changes</button>
                 </form>
@@ -245,30 +244,35 @@
         })
         .catch(error => console.error('Error:', error));
     }
-
     document.addEventListener('DOMContentLoaded', function () {
         var statusSelect = document.getElementById('editBorrowedItemStatus');
-        var borrowedDeadlineInput = document.getElementById('editBorrowedItemBorrowedDeadline');
+        var deadlineContainer = document.getElementById('deadlineContainer');
+
+        if (statusSelect.value === 'approved') {
+            deadlineContainer.style.display = 'block';
+        } else {
+            deadlineContainer.style.display = 'none';
+        }
 
         function toggleDeadlineContainer() {
             if (statusSelect.value === 'approved') {
-                borrowedDeadlineInput.style.display = 'block';
+                deadlineContainer.style.display = 'block';
             } else {
-                borrowedDeadlineInput.style.display = 'none';
+                deadlineContainer.style.display = 'none';
             }
         }
 
         statusSelect.addEventListener('change', toggleDeadlineContainer);
-        toggleDeadlineContainer(); // Initial check
+        toggleDeadlineContainer();
 
         var editBorrowedItemModal = document.getElementById('editBorrowedItemModal');
         editBorrowedItemModal.addEventListener('show.bs.modal', function (event) {
+
             var button = event.relatedTarget;
             var id = button.getAttribute('data-id');
             var itemId = button.getAttribute('data-item-id');
             var itemName = button.getAttribute('data-item-name');
             var status = button.getAttribute('data-status');
-            var borrowedDate = button.getAttribute('data-borrowed-date');
             var borrowedDeadline = button.getAttribute('data-borrowed-deadline');
 
             var modal = this;
@@ -276,8 +280,8 @@
             modal.querySelector('#editBorrowedItemItemId').value = itemId;
             modal.querySelector('#editBorrowedItemItemName').value = itemName;
             modal.querySelector('#editBorrowedItemStatus').value = status;
-            modal.querySelector('#editBorrowedItemBorrowedDate').value = borrowedDate;
             modal.querySelector('#editBorrowedItemBorrowedDeadline').value = borrowedDeadline;
+            toggleDeadlineContainer();
         });
 
         var cancelBorrowedItemModal = document.getElementById('cancelBorrowedItemModal');

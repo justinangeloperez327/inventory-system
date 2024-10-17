@@ -71,3 +71,4 @@ Route::get('attendance-scanner', [AttendanceScannerController::class, 'index']);
 Route::post('attendance-capture', [AttendanceScannerController::class, 'capture']);
 
 Route::get('attendance', [AttendanceController::class, 'index']);
+Route::get('attendance/export-to-excel', [AttendanceController::class, 'exportToExcel']);

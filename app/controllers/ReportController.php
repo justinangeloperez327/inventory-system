@@ -54,7 +54,9 @@ class ReportController extends Controller {
             'borrowed_items.borrowed_date',
             'returned_items.returned_date',
         ])
-        ->where('returned_items.status', '=', 'approved')->get();
+        ->where('returned_items.status', '=', 'approved')
+        ->where('returned_items.returned_date', '>=', today())
+        ->get();
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -81,7 +83,7 @@ class ReportController extends Controller {
 
         // Write the file
         $writer = new Xlsx($spreadsheet);
-        $fileName = 'returned_items.xlsx';
+        $fileName = 'returned_items_'.today().'.xlsx';
         $writer->save($fileName);
 
         // Set headers to prompt download

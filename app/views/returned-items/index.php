@@ -153,10 +153,7 @@
                             <option value="approved">Approved</option>
                         </select>
                     </div>
-                    <div class="mb-3">
-                        <label for="editReturnedItemReturnedDate" class="form-label">Returned Date</label>
-                        <input type="date" class="form-control" id="editReturnedItemReturnedDate" name="returned_date" required>
-                    </div>
+
                     <button type="submit" class="btn btn-primary btn-sm">Save Changes</button>
                 </form>
             </div>
@@ -175,14 +172,13 @@
             var button = event.relatedTarget;
             var id = button.getAttribute('data-id');
             var status = button.getAttribute('data-status');
-            var returnedDate = button.getAttribute('data-returned-date');
             var itemId = button.getAttribute('data-item-id');
             var itemName = button.getAttribute('data-item-name');
             var modal = this;
+
             modal.querySelector('#editReturnedItemId').value = id;
             modal.querySelector('#editReturnedItemItemId').value = itemId;
             modal.querySelector('#editReturnedItemStatus').value = status;
-            modal.querySelector('#editReturnedItemReturnedDate').value = returnedDate;
             modal.querySelector('#editReturnedItemItemName').value = itemName;
         });
 
@@ -191,7 +187,7 @@
         editReturnedItemForm.addEventListener('submit', function (event) {
             event.preventDefault();
             var formData = new FormData(editReturnedItemForm);
-            console.log(formData);
+
             var id = document.getElementById('editReturnedItemId').value;
             fetch('/returned-items/' + id + '/update', {
                 method: 'POST',
