@@ -33,21 +33,6 @@ class ReportController extends Controller {
                 'returned_items.returned_date',
             ])
             ->get();
-        // $returnedItems = ReturnedItem::leftJoin('borrowed_items', 'returned_items.borrowed_item_id', '=', 'borrowed_items.id')
-        //     ->leftJoin('items', 'borrowed_items.item_id', '=', 'items.id')
-        //     ->leftJoin('categories', 'items.category_id', '=', 'categories.id')
-        //     ->leftJoin('users', 'returned_items.user_id', '=', 'users.id')
-        //     ->select([
-        //         'returned_items.*',
-        //         'items.name AS item_name',
-        //         'items.id as item_id',
-        //         'categories.name AS category_name',
-        //         'users.name AS user_name',
-        //         'borrowed_items.borrowed_date',
-        //     ])
-            // ->where('returned_items.status', '=', 'approved')
-            // ->where('returned_items.returned_date', '>=', today())
-            // ->get();
 
         View::render('reports/index', [
             'borrowedItems' => $borrowedItems,
@@ -56,20 +41,18 @@ class ReportController extends Controller {
 
     public function exportToExcel()
     {
-        $data = ReturnedItem::leftJoin('borrowed_items', 'returned_items.borrowed_item_id', '=', 'borrowed_items.id')
-        ->leftJoin('items', 'borrowed_items.item_id', '=', 'items.id')
+        $data = BorrowedItem::leftJoin('items', 'borrowed_items.item_id', '=', 'items.id')
+        ->leftJoin('returned_items', 'borrowed_items.id', '=', 'returned_items.borrowed_item_id')
+        ->leftJoin('users', 'borrowed_items.user_id', '=', 'users.id')
         ->leftJoin('categories', 'items.category_id', '=', 'categories.id')
-        ->leftJoin('users', 'returned_items.user_id', '=', 'users.id')
         ->select([
-            'returned_items.id',
+            'borrowed_items.*',
             'items.name AS item_name',
+            'items.id as item_id',
             'categories.name AS category_name',
             'users.name AS user_name',
-            'borrowed_items.borrowed_date',
             'returned_items.returned_date',
         ])
-        ->where('returned_items.status', '=', 'approved')
-        ->where('returned_items.returned_date', '>=', today())
         ->get();
 
         $spreadsheet = new Spreadsheet();
@@ -92,12 +75,13 @@ class ReportController extends Controller {
             $sheet->setCellValue('D' . $row, $ri['user_name']);
             $sheet->setCellValue('E' . $row, $ri['borrowed_date']);
             $sheet->setCellValue('F' . $row, $ri['returned_date']);
+            $sheet->setCellValue('G' . $row, $ri['status']);
             $row++;
         }
 
         // Write the file
         $writer = new Xlsx($spreadsheet);
-        $fileName = 'returned_items_'.today().'.xlsx';
+        $fileName = 'report_'.today().'.xlsx';
         $writer->save($fileName);
 
         // Set headers to prompt download

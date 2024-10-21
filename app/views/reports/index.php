@@ -72,7 +72,7 @@ Reports
             const a = document.createElement('a');
             a.style.display = 'none';
             a.href = url;
-            a.download = 'returned_items.xlsx';
+            a.download = 'report.xlsx';
             document.body.appendChild(a);
             a.click();
             window.URL.revokeObjectURL(url);
