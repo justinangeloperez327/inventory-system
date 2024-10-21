@@ -36,6 +36,11 @@ class UserController extends Controller{
         }
 
         $password = substr(str_shuffle('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 8);
+        
+        // validate username for speical characters
+        if (!preg_match('/^[a-zA-Z0-9_]+$/', $_POST['username'])) {
+            Redirect::to('users/create', 'Username can only contain letters, numbers, and underscores!');
+        }
 
         User::create([
             'name' => $_POST['name'],
