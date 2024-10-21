@@ -52,6 +52,9 @@ Route::get('users', [UserController::class, 'index']);
 Route::get('users/create', [UserController::class, 'create']);
 Route::post('users/store', [UserController::class, 'store']);
 Route::get('users/{id}', [UserController::class, 'show']);
+Route::get('users/{id}/logs', [UserController::class, 'logs']);
+Route::get('users/{id}/export-to-excel', [UserController::class, 'exportToExcel']);
+
 
 Route::get('reports', [ReportController::class, 'index']);
 Route::get('reports/export-to-excel', [ReportController::class, 'exportToExcel']);

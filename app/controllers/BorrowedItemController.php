@@ -87,6 +87,17 @@ class BorrowedItemController extends Controller
             }
 
             if ($_POST['status'] === 'approved') {
+
+                // add validation for status and borrowed_deadline
+                if (empty($_POST['borrowed_deadline'])) {
+                    Response::json(['success' => false, 'message' => 'Borrowed deadline is required'], 400);
+                }
+
+                if (!in_array($_POST['status'], ['approved', 'rejected'])) {
+                    Response::json(['success' => false, 'message' => 'Invalid status'], 400);
+                }
+
+
                 $currentQuantity = $this->getItemQuantity($_POST['item_id']);
                 $difference = $currentQuantity - 1;
                 

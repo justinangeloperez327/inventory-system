@@ -28,6 +28,7 @@
                                 <th>Name</th>
                                 <th>Role</th>
                                 <th>Qr Code</th>
+                                <th>Default Password</th>
                                 <th scope="col" width="10%">Actions</th>
                             </tr>
                         </thead>
@@ -41,9 +42,11 @@
                                     <td>
                                         <img src="<?php echo $user['qr_code']; ?>" alt="QR Code" style="width: 3rem;" />
                                     </td>
+                                    <td><?php echo $user['default_password'];?></td>
                                     <td>
                                         <button type="button" class="btn btn-danger text-white btn-sm" onclick="generateQrCode(<?php echo $user['id']; ?>)">Generate QR</button>
                                         <button type="button" class="btn btn-success text-white btn-sm" onclick="passwordReset(<?php echo $user['id']; ?>)">Password Reset</button>
+                                        <a type="button" href="users/<?php echo $user['id']; ?>/logs" class="btn btn-secondary text-white btn-sm mt-1">View Logs</a>  
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -99,6 +102,8 @@
 <?php section('scripts'); ?>
 
 <script>
+
+
     function generateQrCode(id) {
         fetch('/generate-qr-code/' + id, {
             method: 'GET'

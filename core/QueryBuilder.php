@@ -323,4 +323,12 @@ class QueryBuilder
             'end_item' => min($offset + $perPage, $totalRecords),
         ];
     }
+
+    public function whereBetween($field, $start, $end)
+    {
+        $this->conditions[] = "$field BETWEEN ? AND ?";
+        $this->bindings[] = $start;
+        $this->bindings[] = $end;
+        return $this;
+    }
 }

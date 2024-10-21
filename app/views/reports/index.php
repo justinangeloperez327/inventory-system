@@ -30,17 +30,19 @@ Reports
                                 <th scope="col">Borrowed By</th>
                                 <th scope="col">Borrowed Date</th>
                                 <th scope="col">Returned Date</th>
+                                <th scope="col">Status</th>
                             </tr>
                         </thead>
                         <tbody class="table-group-divider">
-                            <?php foreach ($returnedItems as $ri): ?>
+                            <?php foreach ($borrowedItems as $bi): ?>
                                 <tr>
-                                    <td scope="row"><?php echo ($ri['id']); ?></td>
-                                    <td><?php echo ($ri['item_name']); ?></td>
-                                    <td><?php echo ($ri['category_name']); ?></td>
-                                    <td><?php echo ($ri['user_name']); ?></td>
-                                    <td><?php echo ($ri['borrowed_date']); ?></td>
-                                    <td><?php echo ($ri['returned_date']); ?></td>
+                                    <td scope="row"><?php echo ($bi['id']); ?></td>
+                                    <td><?php echo ($bi['item_name']); ?></td>
+                                    <td><?php echo ($bi['category_name']); ?></td>
+                                    <td><?php echo ($bi['user_name']); ?></td>
+                                    <td><?php echo ($bi['borrowed_date']); ?></td>
+                                    <td><?php echo ($bi['returned_date']); ?></td>
+                                    <td><?php echo $bi['status']; ?></td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>

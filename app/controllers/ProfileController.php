@@ -39,6 +39,11 @@ class ProfileController extends Controller
 
     public function updatePassword($id)
     {
+        // add regex for the new_password
+        if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/', $_POST['new_password'])) {
+            Redirect::back('Password must contain at least 8 characters, one uppercase letter, one lowercase letter, and one number');
+        }
+
         $user = User::find($id);
         if (!$user) {
             Redirect::to('not-found');
@@ -64,7 +69,8 @@ class ProfileController extends Controller
         }
 
         User::update($user['id'], [
-            'password' => password_hash($_POST['new_password'], PASSWORD_DEFAULT)
+            'password' => password_hash($_POST['new_password'], PASSWORD_DEFAULT),
+            'default_password' => NULL
         ]);
 
         Redirect::to('profile', 'Password updated successfully');

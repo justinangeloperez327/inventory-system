@@ -185,7 +185,7 @@
                     </div>
                     <div class="mb-3" id="deadlineContainer">
                         <label for="editBorrowedItemBorrowedDeadline" class="form-label">Borrowed Deadline</label>
-                        <input type="date" class="form-control" id="editBorrowedItemBorrowedDeadline" name="borrowed_deadline" required>
+                        <input type="date" class="form-control" id="editBorrowedItemBorrowedDeadline" name="borrowed_deadline" >
                     </div>
                     <button type="submit" class="btn btn-primary btn-sm">Save Changes</button>
                 </form>

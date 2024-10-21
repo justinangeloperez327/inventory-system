@@ -32,6 +32,7 @@ CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
+    default_password VARCHAR(255),
     name VARCHAR(255) NOT NULL,
     role ENUM('admin', 'faculty') NOT NULL DEFAULT 'faculty',
     qr_code VARCHAR(255) NOT NULL,

@@ -29,3 +29,7 @@ body {
 table button {
     font-size: 0.7rem !important;
 }
+
+table a {
+    font-size: 0.7rem !important;
+}
