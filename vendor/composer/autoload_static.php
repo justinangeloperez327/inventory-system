@@ -7,6 +7,10 @@ namespace Composer\Autoload;
 class ComposerStaticInit62e10e6c8df9afc192311b196c75bb33
 {
     public static $prefixLengthsPsr4 = array (
+        'a' => 
+        array (
+            'app\\' => 4,
+        ),
         'Z' => 
         array (
             'ZipStream\\' => 10,
@@ -41,6 +45,10 @@ class ComposerStaticInit62e10e6c8df9afc192311b196c75bb33
     );
 
     public static $prefixDirsPsr4 = array (
+        'app\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/app',
+        ),
         'ZipStream\\' => 
         array (
             0 => __DIR__ . '/..' . '/maennchen/zipstream-php/src',

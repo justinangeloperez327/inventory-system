@@ -1,6 +1,11 @@
 {
-    "require": {
-        "phpoffice/phpspreadsheet": "^3.3",
-        "endroid/qr-code": "^5.1"
+  "autoload": {
+    "psr-4": {
+      "app\\": "app/"
     }
+  },
+  "require": {
+    "phpoffice/phpspreadsheet": "^3.3",
+    "endroid/qr-code": "^5.1"
+  }
 }
