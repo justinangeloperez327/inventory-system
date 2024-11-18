@@ -1,19 +1,19 @@
 <?php
 
-use app\Controllers\UserController;
-use app\Controllers\ReturnedItemController;
-use app\Controllers\RenewedItemController;
-use app\Controllers\QrCodeController;
-use app\Controllers\ProfileController;
-use app\Controllers\ItemController;
-use app\Controllers\DashboardController;
-use app\Controllers\CategoryController;
-use app\Controllers\BorrowedItemController;
-use app\Controllers\AuthController;
-use app\Controllers\AttendanceController;
-use app\Controllers\AttendanceScannerController;
-use App\Controllers\ReportController;
-use App\Controllers\ErrorController;
+use app\controllers\UserController;
+use app\controllers\ReturnedItemController;
+use app\controllers\RenewedItemController;
+use app\controllers\QrCodeController;
+use app\controllers\ProfileController;
+use app\controllers\ItemController;
+use app\controllers\DashboardController;
+use app\controllers\CategoryController;
+use app\controllers\BorrowedItemController;
+use app\controllers\AuthController;
+use app\controllers\AttendanceController;
+use app\controllers\AttendanceScannerController;
+use App\controllers\ReportController;
+use App\controllers\ErrorController;
 use core\Route;
 
 
