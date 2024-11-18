@@ -1,9 +1,9 @@
 <?php
 
-namespace app\Controllers;
+namespace app\controllers;
 
-use app\Models\Attendance;
-use app\Models\User;
+use app\models\Attendance;
+use app\models\User;
 use core\Controller;
 use core\Redirect;
 use core\Response;
@@ -11,7 +11,8 @@ use core\View;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-class UserController extends Controller{
+class UserController extends Controller
+{
 
     public function __construct()
     {
@@ -19,24 +20,27 @@ class UserController extends Controller{
             Redirect::to('not-found');
         }
     }
-    
-    public function index() {
+
+    public function index()
+    {
         $users = User::orderby('id', 'desc')->where('id', '!=', 1)->paginate(10);
 
         View::render('users/index', ['users' => $users]);
     }
 
-    public function create() {
+    public function create()
+    {
         View::render('users/create');
     }
 
-    public function store() {
+    public function store()
+    {
         if (User::findBy('username', $_POST['username'])) {
             Redirect::back('Username already exists!');
         }
 
         $password = substr(str_shuffle('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 8);
-        
+
         // validate username for speical characters
         if (!preg_match('/^[a-zA-Z0-9_]+$/', $_POST['username'])) {
             Redirect::to('users/create', 'Username can only contain letters, numbers, and underscores!');
@@ -53,7 +57,8 @@ class UserController extends Controller{
         Redirect::to('users');
     }
 
-    public function show($id) {
+    public function show($id)
+    {
         $user = User::find($id);
         if ($user) {
             View::render('users/show', ['user' => $user]);
@@ -62,7 +67,8 @@ class UserController extends Controller{
         }
     }
 
-    public function edit($id) {
+    public function edit($id)
+    {
         $user = User::find($id);
         if ($user) {
             View::render('users/edit', ['user' => $user]);
@@ -71,7 +77,8 @@ class UserController extends Controller{
         }
     }
 
-    public function update($id) {
+    public function update($id)
+    {
         $user = User::find($id);
         if ($user) {
             User::update($id, [
@@ -84,7 +91,8 @@ class UserController extends Controller{
         }
     }
 
-    public function destroy($id) {
+    public function destroy($id)
+    {
         $user = User::find($id);
         if ($user) {
             $user->delete();
@@ -94,7 +102,8 @@ class UserController extends Controller{
         }
     }
 
-    public function restore($id) {
+    public function restore($id)
+    {
         $user = User::find($id);
         if ($user) {
             $user->restore();
@@ -104,7 +113,8 @@ class UserController extends Controller{
         }
     }
 
-    public function passwordReset($id) {
+    public function passwordReset($id)
+    {
         $user = User::find($id);
 
         if (!$user) {
@@ -114,14 +124,14 @@ class UserController extends Controller{
         User::update($id, [
             'password' => password_hash(1, PASSWORD_DEFAULT)
         ]);
-        
+
         Response::json(['success' => true, 'message' => 'Password reset successfully']);
     }
 
     public function logs($id)
     {
         $user = User::find($id);
-        
+
         if (!$user) {
             View::render('users/index', ['message' => 'User not found!']);
         }
@@ -134,7 +144,7 @@ class UserController extends Controller{
     public function exportToExcel($id)
     {
         $user = User::find($id);
-        
+
         if (!$user) {
             View::render('users/index', ['message' => 'User not found!']);
         }
@@ -157,7 +167,7 @@ class UserController extends Controller{
 
         // Write the file
         $writer = new Xlsx($spreadsheet);
-        $fileName = 'users'.$user['id'].'.xlsx';
+        $fileName = 'users' . $user['id'] . '.xlsx';
         $writer->save($fileName);
 
         // Set headers to prompt download

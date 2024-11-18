@@ -1,11 +1,13 @@
 <?php
-namespace App\Controllers;
+
+namespace App\controllers;
 
 use core\Controller;
 use core\View;
 
-class ErrorController extends Controller {
-    
+class ErrorController extends Controller
+{
+
     public function notFound()
     {
         View::render('errors/404');

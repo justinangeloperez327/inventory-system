@@ -1,8 +1,8 @@
 <?php
 
-namespace app\Controllers;
+namespace app\controllers;
 
-use app\Models\User;
+use app\models\User;
 use core\Controller;
 use core\Redirect;
 use core\Session;
@@ -63,6 +63,5 @@ class AuthController extends Controller
         }
 
         Redirect::to('login');
-
     }
 }

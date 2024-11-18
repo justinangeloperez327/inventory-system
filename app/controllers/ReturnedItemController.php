@@ -1,17 +1,17 @@
 <?php
 
-namespace app\Controllers;
+namespace app\controllers;
 
-use app\Models\BorrowedItem;
-use app\Models\Item;
-use app\Models\ReturnedItem;
+use app\models\BorrowedItem;
+use app\models\Item;
+use app\models\ReturnedItem;
 use core\Controller;
 use core\Redirect;
 use core\Response;
 use core\View;
 use Exception;
 
-class ReturnedItemController extends Controller 
+class ReturnedItemController extends Controller
 {
 
     public function __construct()
@@ -20,8 +20,9 @@ class ReturnedItemController extends Controller
             Redirect::to('not-found');
         }
     }
-    
-    public function index() {
+
+    public function index()
+    {
         $returnedItems = ReturnedItem::leftJoin('borrowed_items', 'returned_items.borrowed_item_id', '=', 'borrowed_items.id')
             ->leftJoin('items', 'borrowed_items.item_id', '=', 'items.id')
             ->leftJoin('categories', 'items.category_id', '=', 'categories.id')
@@ -34,13 +35,13 @@ class ReturnedItemController extends Controller
                 'users.name AS user_name',
                 'borrowed_items.borrowed_date',
             ]);
-            
+
         if (!admin()) {
             $returnedItems->where('returned_items.user_id', '=', userId());
         }
 
         $returnedItems = $returnedItems->paginate(10);
-        
+
         $items = Item::all();
 
         View::render('returned-items/index', [
@@ -49,7 +50,8 @@ class ReturnedItemController extends Controller
         ]);
     }
 
-    public function create($id) {
+    public function create($id)
+    {
         try {
             ReturnedItem::create([
                 'borrowed_item_id' => $id,
@@ -62,7 +64,8 @@ class ReturnedItemController extends Controller
         }
     }
 
-    public function update($id) {
+    public function update($id)
+    {
         try {
             $returnedItem = ReturnedItem::find($id);
             if ($returnedItem) {
@@ -75,7 +78,7 @@ class ReturnedItemController extends Controller
                         'returned_date' => today(),
                         'status' => $_POST['status'],
                     ]);
-                    
+
                     Item::update($item['id'], [
                         'quantity' => $item['quantity'] + 1,
                     ]);
@@ -94,7 +97,8 @@ class ReturnedItemController extends Controller
         }
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         try {
             $item = ReturnedItem::find($id);
             if ($item) {

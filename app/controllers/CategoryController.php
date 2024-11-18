@@ -1,15 +1,15 @@
 <?php
 
-namespace app\Controllers;
+namespace app\controllers;
 
-use app\Models\Category;
+use app\models\Category;
 use core\Controller;
 use core\Redirect;
 use core\Response;
 use core\View;
 use Exception;
 
-class CategoryController extends Controller 
+class CategoryController extends Controller
 {
     public function __construct()
     {
@@ -17,8 +17,9 @@ class CategoryController extends Controller
             Redirect::to('not-found');
         }
     }
-    
-    public function index() {
+
+    public function index()
+    {
         $categories = Category::leftJoin('categories as parent', 'categories.parent_id', '=', 'parent.id')
             ->select(['categories.*', 'parent.name AS parent_name'])
             ->orderBy('id', 'desc')
@@ -29,7 +30,8 @@ class CategoryController extends Controller
         View::render('categories/index', ['categories' => $categories, 'parents' => $parents]);
     }
 
-    public function create() {
+    public function create()
+    {
         try {
             $name = $_POST['name'];
             $parentId = isset($_POST['parent_id']) ? $_POST['parent_id'] : null;
@@ -45,7 +47,8 @@ class CategoryController extends Controller
         }
     }
 
-    public function update($id) {
+    public function update($id)
+    {
         try {
             $item = Category::find($id);
             if ($item) {
@@ -67,7 +70,8 @@ class CategoryController extends Controller
         }
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         try {
             $item = Category::find($id);
             if ($item) {

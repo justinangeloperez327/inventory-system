@@ -1,10 +1,10 @@
 <?php
 
-namespace app\Controllers;
+namespace app\controllers;
 
-use app\Models\BorrowedItem;
-use app\Models\Item;
-use app\Models\RenewedItem;
+use app\models\BorrowedItem;
+use app\models\Item;
+use app\models\RenewedItem;
 use core\Redirect;
 use core\Response;
 use core\View;
@@ -18,7 +18,7 @@ class RenewedItemController
             Redirect::to('not-found');
         }
     }
-    
+
     public function index()
     {
         $renewedItems = RenewedItem::leftJoin('borrowed_items', 'renewed_items.borrowed_item_id', '=', 'borrowed_items.id')
@@ -48,10 +48,11 @@ class RenewedItemController
         ]);
     }
 
-    public function create($id) {
+    public function create($id)
+    {
         try {
             $pendingRenewedItem = RenewedItem::where('borrowed_item_id', '=', $id)
-                ->where('status', '=','pending')
+                ->where('status', '=', 'pending')
                 ->where('user_id', '=', userId())
                 ->first();
 
@@ -60,7 +61,7 @@ class RenewedItemController
             }
 
             $approvedRenewedItem = RenewedItem::where('borrowed_item_id', '=', $id)
-                ->where('status', '=','approved')
+                ->where('status', '=', 'approved')
                 ->where('user_id', '=', userId())
                 ->first();
 
@@ -80,7 +81,8 @@ class RenewedItemController
         }
     }
 
-    public function update($id) {
+    public function update($id)
+    {
         try {
             $item = RenewedItem::find($id);
             if ($item) {

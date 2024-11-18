@@ -1,8 +1,8 @@
 <?php
 
-namespace app\Controllers;
+namespace app\controllers;
 
-use app\Models\User;
+use app\models\User;
 use core\Controller;
 use core\Redirect;
 use core\Session;
@@ -48,12 +48,12 @@ class ProfileController extends Controller
         if (!$user) {
             Redirect::to('not-found');
         }
-        
+
         // check if current_password is confirmed
         if (!isset($_POST['current_password']) || !isset($_POST['confirm_current_password']) || !isset($_POST['new_password']) || !isset($_POST['confirm_new_password'])) {
             Redirect::back('Please fill all fields');
         }
-        
+
         // check if confirm currenct password
         if ($_POST['current_password'] !== $_POST['confirm_current_password']) {
             Redirect::back('Please confirm current password');

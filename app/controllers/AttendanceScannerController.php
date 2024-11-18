@@ -1,9 +1,9 @@
 <?php
 
-namespace app\Controllers;
+namespace app\controllers;
 
-use app\Models\Attendance;
-use app\Models\User;
+use app\models\Attendance;
+use app\models\User;
 use core\Controller;
 use core\Response;
 use core\View;
@@ -22,7 +22,7 @@ class AttendanceScannerController extends Controller
         if (!$user) {
             Response::json(['success' => false, 'message' => 'User not found'], 404);
         }
-        
+
         $today = date('Y-m-d');
 
         $attendance = Attendance::where('user_id', '=', $user['id'])
@@ -39,16 +39,15 @@ class AttendanceScannerController extends Controller
                 Attendance::update($attendance['id'], [
                     'time_out' => date('H:i:s'),
                 ]);
-    
+
                 Response::json([
-                    'success' => true, 
-                    'message' => 'Time out successfully', 
+                    'success' => true,
+                    'message' => 'Time out successfully',
                     'attendance' => $attendance
                 ]);
-
             }
         }
-        
+
         //time in
         Attendance::create([
             'user_id' => $user['id'],
@@ -57,8 +56,8 @@ class AttendanceScannerController extends Controller
         ]);
 
         Response::json([
-            'success' => true, 
-            'message' => 'Time in successfully', 
+            'success' => true,
+            'message' => 'Time in successfully',
             'attendance' => $attendance
         ]);
     }

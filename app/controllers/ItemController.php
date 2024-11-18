@@ -1,16 +1,16 @@
 <?php
 
-namespace app\Controllers;
+namespace app\controllers;
 
-use app\Models\Category;
-use app\Models\Item;
+use app\models\Category;
+use app\models\Item;
 use core\Controller;
 use core\Redirect;
 use core\Response;
 use core\View;
 use Exception;
 
-class ItemController extends Controller 
+class ItemController extends Controller
 {
     public function __construct()
     {
@@ -18,19 +18,21 @@ class ItemController extends Controller
             Redirect::to('not-found');
         }
     }
-    
-    public function index() {
+
+    public function index()
+    {
         $items = Item::leftJoin('categories', 'items.category_id', '=', 'categories.id')
             ->select(['items.*', 'categories.name AS category_name'])
             ->orderBy('id', 'desc')
             ->paginate(10);
-        
+
         $categories = Category::orderBy('name')->get();
 
         View::render('items/index', ['items' => $items, 'categories' => $categories]);
     }
 
-    public function create() {
+    public function create()
+    {
         try {
             Item::create([
                 'name' => $_POST['name'],
@@ -44,7 +46,8 @@ class ItemController extends Controller
         }
     }
 
-    public function update($id) {
+    public function update($id)
+    {
         try {
             $item = Item::find($id);
             if ($item) {
@@ -64,7 +67,8 @@ class ItemController extends Controller
         }
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         try {
             $item = Item::find($id);
 

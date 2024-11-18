@@ -1,15 +1,17 @@
 <?php
-namespace App\Controllers;
 
-use app\Models\BorrowedItem;
-use app\Models\ReturnedItem;
+namespace App\controllers;
+
+use app\models\BorrowedItem;
+use app\models\ReturnedItem;
 use core\Controller;
 use core\Redirect;
 use core\View;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-class ReportController extends Controller {
+class ReportController extends Controller
+{
 
     public function __construct()
     {
@@ -17,7 +19,7 @@ class ReportController extends Controller {
             Redirect::to('not-found');
         }
     }
-    
+
     public function index()
     {
         $borrowedItems = BorrowedItem::leftJoin('items', 'borrowed_items.item_id', '=', 'items.id')
@@ -42,18 +44,18 @@ class ReportController extends Controller {
     public function exportToExcel()
     {
         $data = BorrowedItem::leftJoin('items', 'borrowed_items.item_id', '=', 'items.id')
-        ->leftJoin('returned_items', 'borrowed_items.id', '=', 'returned_items.borrowed_item_id')
-        ->leftJoin('users', 'borrowed_items.user_id', '=', 'users.id')
-        ->leftJoin('categories', 'items.category_id', '=', 'categories.id')
-        ->select([
-            'borrowed_items.*',
-            'items.name AS item_name',
-            'items.id as item_id',
-            'categories.name AS category_name',
-            'users.name AS user_name',
-            'returned_items.returned_date',
-        ])
-        ->get();
+            ->leftJoin('returned_items', 'borrowed_items.id', '=', 'returned_items.borrowed_item_id')
+            ->leftJoin('users', 'borrowed_items.user_id', '=', 'users.id')
+            ->leftJoin('categories', 'items.category_id', '=', 'categories.id')
+            ->select([
+                'borrowed_items.*',
+                'items.name AS item_name',
+                'items.id as item_id',
+                'categories.name AS category_name',
+                'users.name AS user_name',
+                'returned_items.returned_date',
+            ])
+            ->get();
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -81,7 +83,7 @@ class ReportController extends Controller {
 
         // Write the file
         $writer = new Xlsx($spreadsheet);
-        $fileName = 'report_'.today().'.xlsx';
+        $fileName = 'report_' . today() . '.xlsx';
         $writer->save($fileName);
 
         // Set headers to prompt download

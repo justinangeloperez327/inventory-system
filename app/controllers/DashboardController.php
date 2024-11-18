@@ -1,13 +1,14 @@
 <?php
 
-namespace app\Controllers;
+namespace app\controllers;
 
 use core\Controller;
 use core\Redirect;
 use core\View;
 
-class DashboardController extends Controller {
-    
+class DashboardController extends Controller
+{
+
     public function __construct()
     {
         if (!authenticated()) {

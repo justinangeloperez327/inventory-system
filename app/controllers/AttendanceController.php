@@ -1,8 +1,8 @@
 <?php
 
-namespace app\Controllers;
+namespace app\controllers;
 
-use app\Models\Attendance;
+use app\models\Attendance;
 use core\Controller;
 use core\Redirect;
 use core\View;
@@ -17,7 +17,7 @@ class AttendanceController extends Controller
             Redirect::to('not-found');
         }
     }
-    
+
     public function index()
     {
         $attendance = Attendance::leftJoin('users', 'attendance.user_id', '=', 'users.id')
@@ -33,7 +33,8 @@ class AttendanceController extends Controller
         ]);
     }
 
-    public function exportToExcel() {
+    public function exportToExcel()
+    {
         $data = Attendance::leftJoin('users', 'attendance.user_id', '=', 'users.id')
             ->where('created_at', '>=', today())
             ->select([

@@ -1,17 +1,17 @@
 <?php
 
-namespace app\Controllers;
+namespace app\controllers;
 
-use app\Models\BorrowedItem;
-use app\Models\Item;
-use app\Models\ReturnedItem;
+use app\models\BorrowedItem;
+use app\models\Item;
+use app\models\ReturnedItem;
 use core\Controller;
 use core\Redirect;
 use core\Response;
 use core\View;
 use Exception;
 
-class BorrowedItemController extends Controller 
+class BorrowedItemController extends Controller
 {
 
     public function __construct()
@@ -20,8 +20,9 @@ class BorrowedItemController extends Controller
             Redirect::to('not-found');
         }
     }
-    
-    public function index() {
+
+    public function index()
+    {
         $borrowedItems = BorrowedItem::leftJoin('items', 'borrowed_items.item_id', '=', 'items.id')
             ->leftJoin('categories', 'items.category_id', '=', 'categories.id')
             ->leftJoin('users', 'borrowed_items.user_id', '=', 'users.id')
@@ -33,13 +34,13 @@ class BorrowedItemController extends Controller
                 'users.name AS user_name',
                 'returned_items.id AS returned_id',
             ]);
-            
+
         if (!admin()) {
             $borrowedItems->where('borrowed_items.user_id', '=', userId());
         }
 
         $borrowedItems = $borrowedItems->paginate(10);
-            
+
         $items = Item::all();
 
         View::render('borrowed-items/index', [
@@ -48,7 +49,8 @@ class BorrowedItemController extends Controller
         ]);
     }
 
-    public function create() {
+    public function create()
+    {
         try {
             $itemId = $_POST['id'];
             $pendingBorrowedItem = $this->findPendingBorrowedItem($itemId);
@@ -59,7 +61,7 @@ class BorrowedItemController extends Controller
 
             $approvedBorrowedItem = $this->findApprovedBorrowedItem($itemId);
 
-            if($approvedBorrowedItem) {
+            if ($approvedBorrowedItem) {
                 $approvedReturnedItem = $this->findApprovedReturnedItem($approvedBorrowedItem['id']);
 
                 if (!$approvedReturnedItem) {
@@ -79,7 +81,8 @@ class BorrowedItemController extends Controller
         }
     }
 
-    public function update($id) {
+    public function update($id)
+    {
         try {
             $borrowedItem = BorrowedItem::find($id);
             if (!$borrowedItem) {
@@ -100,7 +103,7 @@ class BorrowedItemController extends Controller
 
                 $currentQuantity = $this->getItemQuantity($_POST['item_id']);
                 $difference = $currentQuantity - 1;
-                
+
                 BorrowedItem::update($id, [
                     'item_id' => $_POST['item_id'],
                     'borrowed_date' => today(),
@@ -112,7 +115,6 @@ class BorrowedItemController extends Controller
 
                 Item::update($borrowedItem['item_id'], ['quantity' => $quantity]);
                 Response::json(['success' => true, 'message' => 'Item approved successfully']);
-                
             }
 
             if ($_POST['status'] === 'rejected') {
@@ -127,7 +129,8 @@ class BorrowedItemController extends Controller
         }
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         try {
             $item = BorrowedItem::find($id);
             if ($item) {
