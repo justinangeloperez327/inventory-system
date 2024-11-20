@@ -12,8 +12,8 @@ use app\controllers\BorrowedItemController;
 use app\controllers\AuthController;
 use app\controllers\AttendanceController;
 use app\controllers\AttendanceScannerController;
-use App\controllers\ReportController;
-use App\controllers\ErrorController;
+use app\controllers\ReportController;
+use app\controllers\ErrorController;
 use core\Route;
 
 
