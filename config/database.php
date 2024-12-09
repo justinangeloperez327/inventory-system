@@ -2,7 +2,7 @@
 
 return [
     'host' => 'localhost',
-    'dbname' => 'u594921611_inventory',
-    'user' => 'u594921611_inventory',
-    'password' => 'fI2Ppp6',
+    'dbname' => 'inventory_system',
+    'user' => 'root',
+    'password' => '',
 ];

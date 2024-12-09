@@ -21,29 +21,31 @@ Categories
                             </div>
                         </div>
                     </div>
-                    <table class="table table-sm">
-                        <thead>
-                            <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Parent</th>
-                                <th scope="col" width="10%">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody class="table-group-divider text-capitalize">
-                            <?php foreach ($categories['data'] as $category): ?>
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
                                 <tr>
-                                    <td scope="row"><?php echo ($category['id']); ?></td>
-                                    <td><?php echo ($category['name']); ?></td>
-                                    <td><?php echo ($category['parent_name']); ?></td>
-                                    <td>
-                                        <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editCategoryModal" data-id="<?php echo $category['id']; ?>" data-name="<?php echo $category['name']; ?>" data-parent-id="<?php echo $category['parent_id']; ?>">Edit</button>
-                                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteCategoryModal" data-id="<?php echo $category['id']; ?>">Delete</button>
-                                    </td>
+
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Parent</th>
+                                    <th scope="col" width="10%">Actions</th>
                                 </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody class="table-group-divider text-capitalize">
+                                <?php foreach ($categories['data'] as $category): ?>
+                                    <tr>
+
+                                        <td><?php echo ($category['name']); ?></td>
+                                        <td><?php echo ($category['parent_name']); ?></td>
+                                        <td>
+                                            <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editCategoryModal" data-id="<?php echo $category['id']; ?>" data-name="<?php echo $category['name']; ?>" data-parent-id="<?php echo $category['parent_id']; ?>">Edit</button>
+                                            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteCategoryModal" data-id="<?php echo $category['id']; ?>">Delete</button>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
                     <!-- Pagination Links -->
                     <?php if ($categories['total_pages'] > 1): ?>
                         <nav aria-label="Page navigation">

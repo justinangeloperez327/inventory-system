@@ -22,99 +22,102 @@ Borrowed Items
                             </div>
                         </div>
                     </div>
-                    <table class="table table-sm table-responsive text-sm">
-                        <thead>
-                            <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">Item</th>
-                                <th scope="col">Category</th>
-                                <th scope="col">Status</th>
-                                <th scope="col">Borrowed By</th>
-                                <th scope="col">Borrowed Date</th>
-                                <th scope="col">Borrowed Deadline</th>
-                                <th scope="col" width="15%" class="text-center">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody class="table-group-divider text-capitalize">
-                            <?php foreach ($borrowedItems['data'] as $bi): ?>
+                    <div class="table-responsive">
+                        <table class="table table-sm  text-sm">
+                            <thead>
                                 <tr>
-                                    <td scope="row"><?php echo ($bi['id']); ?></td>
-                                    <td><?php echo ($bi['item_name']); ?></td>
-                                    <td><?php echo ($bi['category_name']); ?></td>
-                                    <td>
-                                        <?php
-                                        $statusClass = '';
-                                        if ($bi['status'] === 'pending') {
-                                            $statusClass = 'text-bg-warning';
-                                        } elseif ($bi['status'] === 'approved') {
-                                            $statusClass = 'text-bg-success';
-                                        } elseif ($bi['status'] === 'rejected') {
-                                            $statusClass = 'text-bg-danger';
-                                        }
-                                        ?>
-                                        <span class="badge rounded-pill <?php echo $statusClass; ?>"><?php echo ($bi['status']); ?></span>
-                                    </td>
-                                    <td class="">
-                                        <?php if ($bi['user_name']): ?>
-                                            <?php echo ($bi['user_name']); ?>
-                                        <?php endif; ?>
-                                    </td>
-                                    <td>
-                                        <?php if ($bi['borrowed_date']): ?>
-                                            <?php echo ($bi['borrowed_date']); ?>
-                                        <?php endif ?>
 
-                                    </td>
-                                    <td>
-                                        <?php if ($bi['borrowed_deadline']): ?>
-                                            <?php echo ($bi['borrowed_deadline']); ?>
-                                        <?php endif ?>
-                                    </td>
-                                    <td>
-
-                                        <?php if (admin()): ?>
-                                            <button
-                                                type="button"
-                                                class="btn btn-success btn-sm"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#editBorrowedItemModal"
-                                                data-id="<?php echo $bi['id']; ?>"
-                                                data-item-id="<?php echo ($bi['item_id']); ?>"
-                                                data-item-name="<?php echo ($bi['item_name']); ?>"
-                                                data-status="<?php echo ($bi['status']); ?>"
-                                                data-borrowed-date="<?php echo ($bi['borrowed_date']); ?>"
-                                                data-borrowed-deadline="<?php echo ($bi['borrowed_deadline']); ?>">
-                                                Edit
-                                            </button>
-                                        <?php else: ?>
-                                            <?php if ($bi['status'] == 'pending'): ?>
-                                                <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
-                                                    data-bs-target="#cancelBorrowedItemModal" data-id="<?php echo $bi['id']; ?>">
-                                                    Cancel
-                                                </button>
-                                            <?php endif; ?>
-                                        <?php endif; ?>
-                                        <?php if (!admin()): ?>
-                                            <?php if ($bi['status'] == 'approved'): ?>
-                                                <div class="d-grid gap-2 d-md-block justify-content-end">
-                                                    <?php if (!$bi['returned_id']): ?>
-                                                        <button type="button" class="btn btn-primary" onclick="handleReturn(<?php echo $bi['id']; ?>)">
-                                                            Return
-                                                        </button>
-                                                    <?php endif; ?>
-                                                    <?php if (!$bi['returned_id']): ?>
-                                                        <button type="button" class="btn btn-warning" onclick="handleRenew(<?php echo $bi['id']; ?>)">
-                                                            Renew
-                                                        </button>
-                                                    <?php endif; ?>
-                                                </div>
-                                            <?php endif; ?>
-                                        <?php endif; ?>
-                                    </td>
+                                    <th scope="col">Item</th>
+                                    <th scope="col">Category</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Borrowed By</th>
+                                    <th scope="col">Borrowed Date</th>
+                                    <th scope="col">Borrowed Deadline</th>
+                                    <th scope="col" width="15%" class="text-center">Actions</th>
                                 </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody class="table-group-divider text-capitalize">
+                                <?php foreach ($borrowedItems['data'] as $bi): ?>
+                                    <tr>
+
+                                        <td><?php echo ($bi['item_name']); ?></td>
+                                        <td><?php echo ($bi['category_name']); ?></td>
+                                        <td>
+                                            <?php
+                                            $statusClass = '';
+                                            if ($bi['status'] === 'pending') {
+                                                $statusClass = 'text-bg-warning';
+                                            } elseif ($bi['status'] === 'approved') {
+                                                $statusClass = 'text-bg-success';
+                                            } elseif ($bi['status'] === 'rejected') {
+                                                $statusClass = 'text-bg-danger';
+                                            }
+                                            ?>
+                                            <span class="badge rounded-pill <?php echo $statusClass; ?>"><?php echo ($bi['status']); ?></span>
+                                        </td>
+                                        <td class="">
+                                            <?php if ($bi['user_name']): ?>
+                                                <?php echo ($bi['user_name']); ?>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td>
+                                            <?php if ($bi['borrowed_date']): ?>
+                                                <?php echo ($bi['borrowed_date']); ?>
+                                            <?php endif ?>
+
+                                        </td>
+                                        <td>
+                                            <?php if ($bi['borrowed_deadline']): ?>
+                                                <?php echo ($bi['borrowed_deadline']); ?>
+                                            <?php endif ?>
+                                        </td>
+                                        <td>
+
+                                            <?php if (admin()): ?>
+                                                <button
+                                                    type="button"
+                                                    class="btn btn-success btn-sm"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#editBorrowedItemModal"
+                                                    data-id="<?php echo $bi['id']; ?>"
+                                                    data-item-id="<?php echo ($bi['item_id']); ?>"
+                                                    data-item-name="<?php echo ($bi['item_name']); ?>"
+                                                    data-status="<?php echo ($bi['status']); ?>"
+                                                    data-borrowed-date="<?php echo ($bi['borrowed_date']); ?>"
+                                                    data-borrowed-deadline="<?php echo ($bi['borrowed_deadline']); ?>">
+                                                    Edit
+                                                </button>
+                                            <?php else: ?>
+                                                <?php if ($bi['status'] == 'pending'): ?>
+                                                    <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                                        data-bs-target="#cancelBorrowedItemModal" data-id="<?php echo $bi['id']; ?>">
+                                                        Cancel
+                                                    </button>
+                                                <?php endif; ?>
+                                            <?php endif; ?>
+                                            <?php if (!admin()): ?>
+                                                <?php if ($bi['status'] == 'approved'): ?>
+                                                    <div class="d-grid gap-2 d-md-block justify-content-end">
+                                                        <?php if (!$bi['returned_id']): ?>
+                                                            <button type="button" class="btn btn-primary" onclick="handleReturn(<?php echo $bi['id']; ?>)">
+                                                                Return
+                                                            </button>
+                                                        <?php endif; ?>
+                                                        <?php if (!$bi['returned_id']): ?>
+                                                            <button type="button" class="btn btn-warning" onclick="handleRenew(<?php echo $bi['id']; ?>)">
+                                                                Renew
+                                                            </button>
+                                                        <?php endif; ?>
+                                                    </div>
+                                                <?php endif; ?>
+                                            <?php endif; ?>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+
                     <!-- Pagination Links -->
                     <?php if ($borrowedItems['total_pages'] > 1): ?>
                         <nav aria-label="Page navigation">

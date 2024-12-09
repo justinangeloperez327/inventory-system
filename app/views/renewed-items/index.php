@@ -18,68 +18,71 @@ Renewed Items
                             </div>
                         </div>
                     </div>
-                    <table class="table table-sm text-sm text-capitalize">
-                        <thead>
-                            <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">Item</th>
-                                <th scope="col">Category</th>
-                                <th scope="col">Status</th>
-                                <th scope="col">Borrowed By</th>
-                                <th scope="col">Borrowed Deadline</th>
-                                <?php if (admin()): ?>
-                                    <th scope="col" width="10%">Actions</th>
-                                <?php endif; ?>
-                            </tr>
-                        </thead>
-                        <tbody class="table-group-divider">
-                            <?php foreach ($renewedItems['data'] as $ri): ?>
+                    <div class="table-responsive">
+                        <table class="table table-sm text-sm text-capitalize">
+                            <thead>
                                 <tr>
-                                    <td scope="row"><?php echo ($ri['id']); ?></td>
-                                    <td><?php echo ($ri['item_name']); ?></td>
-                                    <td><?php echo ($ri['category_name']); ?></td>
-                                    <td>
-                                        <?php
-                                        $statusClass = '';
-                                        if ($ri['status'] === 'pending') {
-                                            $statusClass = 'text-bg-warning';
-                                        } elseif ($ri['status'] === 'approved') {
-                                            $statusClass = 'text-bg-success';
-                                        }
-                                        ?>
-                                        <span class="badge rounded-pill <?php echo $statusClass; ?>"><?php echo ($ri['status']); ?></span>
-                                    </td>
-                                    <td>
-                                        <?php if ($ri['user_name']): ?>
-                                            <?php echo ($ri['user_name']); ?>
-                                        <?php endif; ?>
-                                    </td>
-                                    <td>
-                                        <?php if ($ri['borrowed_deadline']): ?>
-                                            <?php echo ($ri['borrowed_deadline']); ?>
-                                        <?php endif ?>
-                                    </td>
+
+                                    <th scope="col">Item</th>
+                                    <th scope="col">Category</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Borrowed By</th>
+                                    <th scope="col">Borrowed Deadline</th>
                                     <?php if (admin()): ?>
-                                        <td>
-                                            <div>
-                                                <button
-                                                    type="button"
-                                                    class="btn btn-success btn-sm"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#editRenewedItemModal"
-                                                    data-id="<?php echo $ri['id']; ?>"
-                                                    data-item-id="<?php echo $ri['item_id']; ?>"
-                                                    data-status="<?php echo ($ri['status']); ?>"
-                                                    data-borrowed-deadline="<?php echo ($ri['borrowed_deadline']); ?>">
-                                                    Edit
-                                                </button>
-                                            </div>
-                                        </td>
+                                        <th scope="col" width="10%">Actions</th>
                                     <?php endif; ?>
                                 </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody class="table-group-divider">
+                                <?php foreach ($renewedItems['data'] as $ri): ?>
+                                    <tr>
+
+                                        <td><?php echo ($ri['item_name']); ?></td>
+                                        <td><?php echo ($ri['category_name']); ?></td>
+                                        <td>
+                                            <?php
+                                            $statusClass = '';
+                                            if ($ri['status'] === 'pending') {
+                                                $statusClass = 'text-bg-warning';
+                                            } elseif ($ri['status'] === 'approved') {
+                                                $statusClass = 'text-bg-success';
+                                            }
+                                            ?>
+                                            <span class="badge rounded-pill <?php echo $statusClass; ?>"><?php echo ($ri['status']); ?></span>
+                                        </td>
+                                        <td>
+                                            <?php if ($ri['user_name']): ?>
+                                                <?php echo ($ri['user_name']); ?>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td>
+                                            <?php if ($ri['borrowed_deadline']): ?>
+                                                <?php echo ($ri['borrowed_deadline']); ?>
+                                            <?php endif ?>
+                                        </td>
+                                        <?php if (admin()): ?>
+                                            <td>
+                                                <div>
+                                                    <button
+                                                        type="button"
+                                                        class="btn btn-success btn-sm"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#editRenewedItemModal"
+                                                        data-id="<?php echo $ri['id']; ?>"
+                                                        data-item-id="<?php echo $ri['item_id']; ?>"
+                                                        data-status="<?php echo ($ri['status']); ?>"
+                                                        data-borrowed-deadline="<?php echo ($ri['borrowed_deadline']); ?>">
+                                                        Edit
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        <?php endif; ?>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+
                     <!-- Pagination Links -->
                     <?php if ($renewedItems['total_pages'] > 1): ?>
                         <nav aria-label="Page navigation">

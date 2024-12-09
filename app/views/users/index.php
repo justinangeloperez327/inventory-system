@@ -23,7 +23,6 @@ Users
                     <table class="table table-sm text-capitalize">
                         <thead>
                             <tr>
-                                <th>ID</th>
                                 <th>Username</th>
                                 <th>Name</th>
                                 <th>Role</th>
@@ -35,7 +34,6 @@ Users
                         <tbody>
                             <?php foreach ($users['data'] as $user): ?>
                                 <tr>
-                                    <td><?php echo $user['id']; ?></td>
                                     <td><?php echo $user['username']; ?></td>
                                     <td><?php echo $user['name']; ?></td>
                                     <td><?php echo $user['role']; ?></td>

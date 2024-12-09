@@ -24,28 +24,30 @@ Attendance
                             </div>
                         </div>
                     </div>
-                    <table class="table table-sm table-responsive text-sm">
-                        <thead>
-                            <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">User</th>
-                                <th scope="col">Date</th>
-                                <th scope="col">Time In</th>
-                                <th scope="col">Time Out</th>
-                            </tr>
-                        </thead>
-                        <tbody class="table-group-divider text-capitalize">
-                            <?php foreach ($attendance['data'] as $a): ?>
+                    <div class="table-responsive">
+                        <table class="table table-sm text-sm">
+                            <thead>
                                 <tr>
-                                    <td scope="row"><?php echo ($a['id']); ?></td>
-                                    <td><?php echo ($a['user_name']); ?></td>
-                                    <td><?php echo $a['date']; ?></td>
-                                    <td><?php echo $a['time_in'] ? (new DateTime($a['time_in']))->format('h:i:s A') : 'N/A'; ?></td>
-                                    <td><?php echo $a['time_out'] ? (new DateTime($a['time_out']))->format('h:i:s A') : 'N/A'; ?></td>
+
+                                    <th scope="col">User</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Time In</th>
+                                    <th scope="col">Time Out</th>
                                 </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody class="table-group-divider text-capitalize">
+                                <?php foreach ($attendance['data'] as $a): ?>
+                                    <tr>
+
+                                        <td><?php echo ($a['user_name']); ?></td>
+                                        <td><?php echo $a['date']; ?></td>
+                                        <td><?php echo $a['time_in'] ? (new DateTime($a['time_in']))->format('h:i:s A') : 'N/A'; ?></td>
+                                        <td><?php echo $a['time_out'] ? (new DateTime($a['time_out']))->format('h:i:s A') : 'N/A'; ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
                     <!-- Pagination Links -->
                     <?php if ($attendance['total_pages'] > 1): ?>
                         <nav aria-label="Page navigation">

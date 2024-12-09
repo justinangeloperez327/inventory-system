@@ -1,7 +1,7 @@
 <?php layout('app'); ?>
 
 <?php section('title'); ?>
-    Users
+Users
 <?php endsection(); ?>
 
 <?php section('content'); ?>
@@ -13,7 +13,7 @@
                     <div class="card-title">
                         <div class="row align-items-center">
                             <div class="col text-left">
-                            <h4 class="text-capitalize"><?php echo $user['username'] ?> Logs</h4>
+                                <h4 class="text-capitalize"><?php echo $user['username'] ?> Logs</h4>
                             </div>
                             <div class="col-auto">
                                 <button type="button" class="btn btn-success btn-sm" onclick="handleExportToExcel(<?php echo $user['id']; ?>)">Export to Excel</button>
@@ -23,7 +23,6 @@
                     <table class="table table-sm text-capitalize">
                         <thead>
                             <tr>
-                                <th>ID</th>
                                 <th>Date</th>
                                 <th>Time In</th>
                                 <th>Time Out</th>
@@ -32,7 +31,6 @@
                         <tbody>
                             <?php foreach ($attendances['data'] as $attendance): ?>
                                 <tr>
-                                    <td><?php echo $attendance['id']; ?></td>
                                     <td><?php echo $attendance['date']; ?></td>
                                     <td><?php echo $attendance['time_in']; ?></td>
                                     <td><?php echo $attendance['time_out']; ?></td>
@@ -88,27 +86,26 @@
 <?php endsection(); ?>
 <?php section('scripts'); ?>
 <script>
-    function handleExportToExcel(id)
-    {
+    function handleExportToExcel(id) {
         fetch(`/users/${id}/export-to-excel`, {
-            method: 'GET'
-        }).then(response => {
-            if (response.ok) {
-                return response.blob();
-            }
-            throw new Error('Network response was not ok.');
-        })
-        .then(blob => {
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.style.display = 'none';
-            a.href = url;
-            a.download = 'users_'+id+'.xlsx';
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-        })
-        .catch(error => console.error('There was a problem with the fetch operation:', error));
+                method: 'GET'
+            }).then(response => {
+                if (response.ok) {
+                    return response.blob();
+                }
+                throw new Error('Network response was not ok.');
+            })
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = 'users_' + id + '.xlsx';
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+            })
+            .catch(error => console.error('There was a problem with the fetch operation:', error));
     }
 </script>
 <?php endsection(); ?>

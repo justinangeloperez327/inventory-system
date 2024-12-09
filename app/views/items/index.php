@@ -21,60 +21,62 @@ Items
                             </div>
                         </div>
                     </div>
-                    <table class="table table-sm text-capitalize">
-                        <thead>
-                            <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Category</th>
-                                <th scope="col">
-                                    <?php if (admin()): ?>
-                                        Quantity
-                                    <?php else: ?>
-                                        Availability
-                                    <?php endif; ?>
-                                </th>
-                                <th scope="col" width="10%">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody class="table-group-divider">
-                            <?php foreach ($items['data'] as $item): ?>
+                    <div class="table-responsive">
+                        <table class="table table-sm text-capitalize">
+                            <thead>
                                 <tr>
-                                    <td scope="row"><?php echo ($item['id']); ?></td>
-                                    <td><?php echo ($item['name']); ?></td>
-                                    <td><?php echo ($item['category_name']); ?></td>
-                                    <td>
-                                        <?php if (admin()): ?>
-                                            <?php echo ($item['quantity']); ?>
-                                        <?php else: ?>
-                                            <?php if ($item['quantity'] > 0): ?>
-                                                <span class="badge bg-success">Available</span>
-                                            <?php else: ?>
-                                                <span class="badge bg-danger">Not Available</span>
-                                            <?php endif; ?>
-                                        <?php endif; ?>
-                                    </td>
-                                    <td class="text-right">
-                                        <?php if (admin()): ?>
-                                            <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editItemModal"
-                                                data-id="<?php echo $item['id']; ?>"
-                                                data-name="<?php echo ($item['name']); ?>"
-                                                data-category-id="<?php echo ($item['category_id']); ?>"
-                                                data-quantity="<?php echo $item['quantity']; ?>">
-                                                Edit
-                                            </button>
-                                            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteItemModal" data-id="<?php echo $item['id']; ?>">Delete</button>
 
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Category</th>
+                                    <th scope="col">
+                                        <?php if (admin()): ?>
+                                            Quantity
                                         <?php else: ?>
-                                            <?php if ($item['quantity'] > 0): ?>
-                                                <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#borrowItemModal" data-id="<?php echo $item['id']; ?>">Borrow</button>
-                                            <?php endif; ?>
+                                            Availability
                                         <?php endif; ?>
-                                    </td>
+                                    </th>
+                                    <th scope="col" width="10%">Actions</th>
                                 </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody class="table-group-divider">
+                                <?php foreach ($items['data'] as $item): ?>
+                                    <tr>
+
+                                        <td><?php echo ($item['name']); ?></td>
+                                        <td><?php echo ($item['category_name']); ?></td>
+                                        <td>
+                                            <?php if (admin()): ?>
+                                                <?php echo ($item['quantity']); ?>
+                                            <?php else: ?>
+                                                <?php if ($item['quantity'] > 0): ?>
+                                                    <span class="badge bg-success">Available</span>
+                                                <?php else: ?>
+                                                    <span class="badge bg-danger">Not Available</span>
+                                                <?php endif; ?>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td class="text-right">
+                                            <?php if (admin()): ?>
+                                                <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editItemModal"
+                                                    data-id="<?php echo $item['id']; ?>"
+                                                    data-name="<?php echo ($item['name']); ?>"
+                                                    data-category-id="<?php echo ($item['category_id']); ?>"
+                                                    data-quantity="<?php echo $item['quantity']; ?>">
+                                                    Edit
+                                                </button>
+                                                <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteItemModal" data-id="<?php echo $item['id']; ?>">Delete</button>
+
+                                            <?php else: ?>
+                                                <?php if ($item['quantity'] > 0): ?>
+                                                    <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#borrowItemModal" data-id="<?php echo $item['id']; ?>">Borrow</button>
+                                                <?php endif; ?>
+                                            <?php endif; ?>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
                     <!-- Pagination Links -->
                     <?php if ($items['total_pages'] > 1): ?>
                         <nav aria-label="Page navigation">
