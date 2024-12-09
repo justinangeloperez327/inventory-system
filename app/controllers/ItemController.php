@@ -31,14 +31,46 @@ class ItemController extends Controller
         View::render('items/index', ['items' => $items, 'categories' => $categories]);
     }
 
+    public function archive()
+    {
+        $items = Item::leftJoin('categories', 'items.category_id', '=', 'categories.id')
+            ->select(['items.*', 'categories.name AS category_name'])
+            ->withTrashed()
+            ->where('deleted_at', 'IS NOT', null)
+            ->orderBy('id', 'desc')
+            ->paginate(10);
+
+        $categories = Category::orderBy('name')->get();
+
+        View::render('items/archive', ['items' => $items, 'categories' => $categories]);
+    }
+
     public function create()
     {
         try {
-            Item::create([
-                'name' => $_POST['name'],
-                'category_id' => $_POST['category_id'],
-                'quantity' => $_POST['quantity']
-            ]);
+            $name = $_POST['name'];
+            $categoryId = $_POST['category_id'];
+            $quantity = $_POST['quantity'];
+
+            if (empty($name)) {
+                Response::json(['success' => false, 'message' => 'Name is required'], 400);
+            }
+
+            $existingItem = Item::where('name', '=', $name)->where('category_id', '=', $categoryId)->first();
+
+            if (!$existingItem) {
+                Item::create([
+                    'name' => $name,
+                    'category_id' => $categoryId,
+                    'quantity' => $quantity
+                ]);
+            } else {
+                Item::update($existingItem['id'], [
+                    'quantity' => $existingItem['quantity'] + $quantity
+                ]);
+            }
+
+
 
             Response::json(['success' => true, 'message' => 'Item added successfully']);
         } catch (Exception $e) {
@@ -82,6 +114,24 @@ class ItemController extends Controller
             }
         } catch (Exception $e) {
             Response::json(['success' => false, 'message' => 'Error deleting item: ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function restore($id)
+    {
+        try {
+            $item = Item::where('id', '=', $id)->withTrashed()->first();
+
+            if ($item) {
+
+                Item::restore($id);
+
+                Response::json(['success' => true, 'message' => 'Item restored successfully']);
+            } else {
+                Response::json(['success' => false, 'message' => 'Item not found'], 404);
+            }
+        } catch (Exception $e) {
+            Response::json(['success' => false, 'message' => 'Error restoring item: ' . $e->getMessage()], 500);
         }
     }
 }

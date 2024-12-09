@@ -17,7 +17,15 @@ Reports
                                 <h4>Reports</h4>
                             </div>
                             <div class="col-auto">
-                                <button type="button" class="btn btn-success btn-sm" onclick="handleExportToExcel()">Export to Excel</button>
+                                <div class="input-group input-group-sm">
+                                    <input type="text" class="form-control" id="search" placeholder="Search" value="<?php echo $search; ?>">
+                                    <div class="ms-2">
+                                        <button type="button" class="btn btn-primary" id="search-btn">Search</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <button type="button" class="btn btn-success btn-sm" id="export-report-to-excel-btn">Export to Excel</button>
                             </div>
                         </div>
                     </div>
@@ -57,27 +65,32 @@ Reports
 
 <?php section('scripts'); ?>
 <script>
-    function handleExportToExcel()
-    {
-        fetch('/reports/export-to-excel', {
-            method: 'GET'
-        }).then(response => {
-            if (response.ok) {
-                return response.blob();
-            }
-            throw new Error('Network response was not ok.');
-        })
-        .then(blob => {
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.style.display = 'none';
-            a.href = url;
-            a.download = 'report.xlsx';
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-        })
-        .catch(error => console.error('There was a problem with the fetch operation:', error));
-    }
+    document.getElementById('search-btn').addEventListener('click', function() {
+        const search = document.getElementById('search').value;
+        window.location.href = `/reports?search=${search}`;
+    });
+
+    document.getElementById('export-report-to-excel-btn').addEventListener('click', function() {
+        const search = document.getElementById('search').value;
+        fetch(`/reports/export-to-excel?search=${search}`, {
+                method: 'GET'
+            }).then(response => {
+                if (response.ok) {
+                    return response.blob();
+                }
+                throw new Error('Network response was not ok.');
+            })
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = 'report.xlsx';
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+            })
+            .catch(error => console.error('There was a problem with the fetch operation:', error));
+    });
 </script>
 <?php endsection(); ?>

@@ -16,6 +16,8 @@ class QueryBuilder
     protected $offset = '';
     protected $joins = [];
     protected $withTrashed = false; // For including soft-deleted records
+    protected $groupByFields = '';
+    protected $distinct = false;
 
     public function __construct()
     {
@@ -65,7 +67,7 @@ class QueryBuilder
     {
         // Handle if select is passed as an array or a string
         $this->selectFields = is_array($fields) ? implode(',', $fields) : $fields;
-        
+
         return $this;
     }
 
@@ -159,7 +161,7 @@ class QueryBuilder
         $fields = '';
         $this->bindings = []; // Reset bindings to avoid conflicts
         foreach ($data as $key => $value) {
-            $fields .= "$key = ?,"; 
+            $fields .= "$key = ?,";
             $this->bindings[] = $value;
         }
         $fields = rtrim($fields, ',');
@@ -329,6 +331,40 @@ class QueryBuilder
         $this->conditions[] = "$field BETWEEN ? AND ?";
         $this->bindings[] = $start;
         $this->bindings[] = $end;
+        return $this;
+    }
+
+    public function distinct()
+    {
+        $this->distinct = true;
+        return $this;
+    }
+
+    public function groupBy($fields)
+    {
+        if (is_array($fields)) {
+            $this->groupByFields = implode(', ', $fields);
+        } else {
+            $this->groupByFields = $fields;
+        }
+        return $this;
+    }
+
+    public function whereDate($field, $date)
+    {
+        $this->conditions[] = "DATE($field) = ?";
+        $this->bindings[] = $date;
+        return $this;
+    }
+
+    public function whereAny($conditions)
+    {
+        $this->conditions[] = '(' . implode(' OR ', array_map(function ($condition) {
+            return $condition[0] . ' ' . $condition[1] . ' ?';
+        }, $conditions)) . ')';
+
+        $this->bindings = array_merge($this->bindings, array_column($conditions, 2));
+
         return $this;
     }
 }

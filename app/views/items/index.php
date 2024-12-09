@@ -1,7 +1,7 @@
 <?php layout('app'); ?>
 
 <?php section('title'); ?>
-    Items
+Items
 <?php endsection(); ?>
 
 <?php section('content'); ?>
@@ -9,18 +9,18 @@
     <div class="row justify-content-center">
         <div class="">
             <div class="card">
-                
+
                 <div class="card-body">
-                <div class="card-title">
-                    <div class="row align-items-center">
-                        <div class="col text-left">
-                            <h4>Items</h4>
-                        </div>
-                        <div class="col-auto">
-                            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addItemModal">New</button>
+                    <div class="card-title">
+                        <div class="row align-items-center">
+                            <div class="col text-left">
+                                <h4>Items</h4>
+                            </div>
+                            <div class="col-auto">
+                                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addItemModal">New</button>
+                            </div>
                         </div>
                     </div>
-                </div>
                     <table class="table table-sm text-capitalize">
                         <thead>
                             <tr>
@@ -28,7 +28,7 @@
                                 <th scope="col">Name</th>
                                 <th scope="col">Category</th>
                                 <th scope="col">
-                                    <?php if(admin()): ?>
+                                    <?php if (admin()): ?>
                                         Quantity
                                     <?php else: ?>
                                         Availability
@@ -44,7 +44,7 @@
                                     <td><?php echo ($item['name']); ?></td>
                                     <td><?php echo ($item['category_name']); ?></td>
                                     <td>
-                                        <?php if(admin()): ?>
+                                        <?php if (admin()): ?>
                                             <?php echo ($item['quantity']); ?>
                                         <?php else: ?>
                                             <?php if ($item['quantity'] > 0): ?>
@@ -55,13 +55,12 @@
                                         <?php endif; ?>
                                     </td>
                                     <td class="text-right">
-                                        <?php if(admin()): ?>
+                                        <?php if (admin()): ?>
                                             <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editItemModal"
                                                 data-id="<?php echo $item['id']; ?>"
                                                 data-name="<?php echo ($item['name']); ?>"
                                                 data-category-id="<?php echo ($item['category_id']); ?>"
-                                                data-quantity="<?php echo $item['quantity']; ?>"
-                                            >
+                                                data-quantity="<?php echo $item['quantity']; ?>">
                                                 Edit
                                             </button>
                                             <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteItemModal" data-id="<?php echo $item['id']; ?>">Delete</button>
@@ -172,7 +171,7 @@
                     <div class="mb-3">
                         <label for="editItemCategoryId" class="form-label">Category</label>
                         <select class="form-control" id="editItemCategoryId" name="category_id" required>
-                            
+
                             <?php foreach ($categories as $category): ?>
                                 <option value="<?php echo $category['id']; ?>"><?php echo ($category['name']); ?></option>
                             <?php endforeach; ?>
@@ -231,10 +230,10 @@
 
 <?php section('scripts'); ?>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         var editItemModal = document.getElementById('editItemModal');
 
-        editItemModal.addEventListener('show.bs.modal', function (event) {
+        editItemModal.addEventListener('show.bs.modal', function(event) {
             var button = event.relatedTarget;
             var id = button.getAttribute('data-id');
             var name = button.getAttribute('data-name');
@@ -250,7 +249,7 @@
 
         var deleteItemModal = document.getElementById('deleteItemModal');
 
-        deleteItemModal.addEventListener('show.bs.modal', function (event) {
+        deleteItemModal.addEventListener('show.bs.modal', function(event) {
             var button = event.relatedTarget;
             var id = button.getAttribute('data-id');
 
@@ -260,7 +259,7 @@
 
         var borrowItemModal = document.getElementById('borrowItemModal');
 
-        borrowItemModal.addEventListener('show.bs.modal', function (event) {
+        borrowItemModal.addEventListener('show.bs.modal', function(event) {
             var button = event.relatedTarget;
             var id = button.getAttribute('data-id');
 
@@ -270,87 +269,103 @@
 
         var addItemForm = document.getElementById('addItemForm');
 
-        addItemForm.addEventListener('submit', function (event) {
+        addItemForm.addEventListener('submit', function(event) {
             event.preventDefault();
             var formData = new FormData(addItemForm);
             fetch('/items', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    location.reload(); // Reload the page to see the new item
-                } else {
-                    alert(data.message);
-                }
-            })
-            .catch(error => console.error('Error:', error));
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        //  close modal
+                        var modal = bootstrap.Modal.getInstance(addItemModal);
+                        modal.hide();
+                        setTimeout(() => {
+                            alert(data.message);
+                            location.reload(); // Reload the page to see the new item
+                        }, 200);
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
         });
 
         var editItemForm = document.getElementById('editItemForm');
 
-        editItemForm.addEventListener('submit', function (event) {
+        editItemForm.addEventListener('submit', function(event) {
             event.preventDefault();
             var formData = new FormData(editItemForm);
             var id = document.getElementById('editItemId').value;
             fetch('/items/' + id, {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    location.reload(); // Reload the page to see the updated item
-                } else {
-                    alert(data.message);
-                }
-            })
-            .catch(error => console.error('Error:', error));
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        var modal = bootstrap.Modal.getInstance(editItemModal);
+                        modal.hide();
+                        setTimeout(() => {
+                            alert(data.message);
+                            location.reload(); // Reload the page to see the new item
+                        }, 200);
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
         });
 
         var deleteItemForm = document.getElementById('deleteItemForm');
 
-        deleteItemForm.addEventListener('submit', function (event) {
+        deleteItemForm.addEventListener('submit', function(event) {
             event.preventDefault();
             var formData = new FormData(deleteItemForm);
             var id = document.getElementById('deleteItemId').value;
             fetch('/items/' + id + '/delete', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    location.reload(); // Reload the page to see the updated list
-                } else {
-                    alert(data.message);
-                }
-            })
-            .catch(error => console.error('Error:', error));
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        var modal = bootstrap.Modal.getInstance(deleteItemModal);
+                        modal.hide();
+                        setTimeout(() => {
+                            alert(data.message);
+                            location.reload(); // Reload the page to see the new item
+                        }, 200);
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
         });
 
         var borrowItemForm = document.getElementById('borrowItemForm');
 
-        borrowItemForm.addEventListener('submit', function (event) {
+        borrowItemForm.addEventListener('submit', function(event) {
             event.preventDefault();
             var formData = new FormData(borrowItemForm);
             var id = document.getElementById('borrowItemId').value;
             fetch('/borrowed-items', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    location.href = '/borrowed-items'; // Redirect to borrowed items page
-                } else {
-                    alert(data.message);
-                    var modal = bootstrap.Modal.getInstance(borrowItemModal);
-                    modal.hide();
-                }
-            })
-            .catch(error => console.error('Error:', error));
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.href = '/borrowed-items'; // Redirect to borrowed items page
+                    } else {
+                        alert(data.message);
+                        var modal = bootstrap.Modal.getInstance(borrowItemModal);
+                        modal.hide();
+                    }
+                })
+                .catch(error => console.error('Error:', error));
         });
     });
 </script>

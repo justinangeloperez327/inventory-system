@@ -1,7 +1,7 @@
 <?php layout('app'); ?>
 
 <?php section('title'); ?>
-    Categories
+Categories
 <?php endsection(); ?>
 
 <?php section('content'); ?>
@@ -11,16 +11,16 @@
             <div class="card">
 
                 <div class="card-body">
-                <div class="card-title">
-                    <div class="row align-items-center">
-                        <div class="col text-left">
-                            <h4>Categories</h4>
-                        </div>
-                        <div class="col-auto">
-                            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addCategoryModal">New</button>
+                    <div class="card-title">
+                        <div class="row align-items-center">
+                            <div class="col text-left">
+                                <h4>Categories</h4>
+                            </div>
+                            <div class="col-auto">
+                                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addCategoryModal">New</button>
+                            </div>
                         </div>
                     </div>
-                </div>
                     <table class="table table-sm">
                         <thead>
                             <tr>
@@ -37,7 +37,7 @@
                                     <td><?php echo ($category['name']); ?></td>
                                     <td><?php echo ($category['parent_name']); ?></td>
                                     <td>
-                                        <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editCategoryModal" data-id="<?php echo $category['id'];?>" data-name="<?php echo$category['name']; ?>" data-parent-id="<?php echo $category['parent_id']; ?>">Edit</button>
+                                        <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editCategoryModal" data-id="<?php echo $category['id']; ?>" data-name="<?php echo $category['name']; ?>" data-parent-id="<?php echo $category['parent_id']; ?>">Edit</button>
                                         <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteCategoryModal" data-id="<?php echo $category['id']; ?>">Delete</button>
                                     </td>
                                 </tr>
@@ -171,9 +171,9 @@
 
 <?php section('scripts'); ?>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         var editCategoryModal = document.getElementById('editCategoryModal');
-        editCategoryModal.addEventListener('show.bs.modal', function (event) {
+        editCategoryModal.addEventListener('show.bs.modal', function(event) {
             var button = event.relatedTarget;
             var id = button.getAttribute('data-id');
             var name = button.getAttribute('data-name');
@@ -186,7 +186,7 @@
         });
 
         var deleteCategoryModal = document.getElementById('deleteCategoryModal');
-        deleteCategoryModal.addEventListener('show.bs.modal', function (event) {
+        deleteCategoryModal.addEventListener('show.bs.modal', function(event) {
             var button = event.relatedTarget;
             var id = button.getAttribute('data-id');
 
@@ -195,62 +195,79 @@
         });
 
         var addItemForm = document.getElementById('addItemForm');
-        addItemForm.addEventListener('submit', function (event) {
+        addItemForm.addEventListener('submit', function(event) {
             event.preventDefault();
             var formData = new FormData(addItemForm);
             fetch('/categories', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    location.reload(); // Reload the page to see the new item
-                } else {
-                    alert(data.message);
-                }
-            })
-            .catch(error => console.error('Error:', error));
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        var modal = bootstrap.Modal.getInstance(addCategoryModal);
+                        modal.hide();
+                        setTimeout(() => {
+                            alert(data.message);
+                            location.reload(); // Reload the page to see the new item
+                        }, 200);
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
         });
 
         var editItemForm = document.getElementById('editItemForm');
-        editItemForm.addEventListener('submit', function (event) {
+        editItemForm.addEventListener('submit', function(event) {
             event.preventDefault();
             var formData = new FormData(editItemForm);
             var id = document.getElementById('editCategoryId').value;
             fetch('/categories/' + id, {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    location.reload(); // Reload the page to see the updated item
-                } else {
-                    alert(data.message);
-                }
-            })
-            .catch(error => console.error('Error:', error));
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        var modal = bootstrap.Modal.getInstance(editCategoryModal);
+                        modal.hide();
+                        setTimeout(() => {
+                            alert(data.message);
+                            location.reload(); // Reload the page to see the new item
+                        }, 200);
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
         });
 
         var deleteItemForm = document.getElementById('deleteItemForm');
-        deleteItemForm.addEventListener('submit', function (event) {
+        deleteItemForm.addEventListener('submit', function(event) {
             event.preventDefault();
             var formData = new FormData(deleteItemForm);
             var id = document.getElementById('deleteItemId').value;
             fetch('/categories/' + id + '/delete', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    location.reload(); // Reload the page to see the updated list
-                } else {
-                    alert(data.message);
-                }
-            })
-            .catch(error => console.error('Error:', error));
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        var modal = bootstrap.Modal.getInstance(deleteCategoryModal);
+                        modal.hide();
+                        setTimeout(() => {
+                            alert(data.message);
+                            location.reload(); // Reload the page to see the new item
+                        }, 200);
+                    } else {
+                        alert(data.message);
+                        var modal = bootstrap.Modal.getInstance(deleteCategoryModal);
+                        modal.hide();
+                    }
+                })
+                .catch(error => console.error('Error:', error));
         });
     });
 </script>

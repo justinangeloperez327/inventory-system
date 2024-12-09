@@ -1,7 +1,7 @@
 <?php layout('app'); ?>
 
 <?php section('title'); ?>
-    Attendance
+Attendance
 <?php endsection(); ?>
 
 <?php section('content'); ?>
@@ -9,12 +9,15 @@
     <div class="row justify-content-center">
         <div class="">
             <div class="card">
-                
+
                 <div class="card-body">
-                <div class="card-title">
+                    <div class="card-title">
                         <div class="row align-items-center">
                             <div class="col text-left">
                                 <h4>Attendance</h4>
+                            </div>
+                            <div class="col-auto">
+                                <input type="date" class="form-control form-control-sm" id="search-date" placeholder="Date" value="<?php echo $searchDate; ?>">
                             </div>
                             <div class="col-auto">
                                 <button type="button" class="btn btn-success btn-sm" onclick="handleExportToExcel()">Export to Excel</button>
@@ -37,8 +40,8 @@
                                     <td scope="row"><?php echo ($a['id']); ?></td>
                                     <td><?php echo ($a['user_name']); ?></td>
                                     <td><?php echo $a['date']; ?></td>
-                                    <td><?php echo $a['time_in']; ?></td>
-                                    <td><?php echo $a['time_out']; ?></td>
+                                    <td><?php echo $a['time_in'] ? (new DateTime($a['time_in']))->format('h:i:s A') : 'N/A'; ?></td>
+                                    <td><?php echo $a['time_out'] ? (new DateTime($a['time_out']))->format('h:i:s A') : 'N/A'; ?></td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
@@ -91,27 +94,35 @@
 <?php endsection(); ?>
 <?php section('scripts'); ?>
 <script>
-    function handleExportToExcel()
-    {
-        fetch('/attendance/export-to-excel', {
-            method: 'GET'
-        }).then(response => {
-            if (response.ok) {
-                return response.blob();
-            }
-            throw new Error('Network response was not ok.');
-        })
-        .then(blob => {
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.style.display = 'none';
-            a.href = url;
-            a.download = 'attendance.xlsx';
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-        })
-        .catch(error => console.error('There was a problem with the fetch operation:', error));
+    document.getElementById('search-date').addEventListener('change', function() {
+        const selectedDate = this.value;
+        const url = new URL(window.location.href);
+        url.searchParams.set('search_date', selectedDate);
+        window.history.pushState({}, '', url);
+        location.reload();
+    });
+
+    function handleExportToExcel() {
+        const searchDate = document.getElementById('search-date').value;
+        fetch('/attendance/export-to-excel?search_date=' + searchDate, {
+                method: 'GET'
+            }).then(response => {
+                if (response.ok) {
+                    return response.blob();
+                }
+                throw new Error('Network response was not ok.');
+            })
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = 'attendance.xlsx';
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+            })
+            .catch(error => console.error('There was a problem with the fetch operation:', error));
     }
 </script>
 <?php endsection(); ?>

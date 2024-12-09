@@ -62,7 +62,7 @@ CREATE TABLE borrowed_items (
 CREATE TABLE returned_items (
     id INT AUTO_INCREMENT PRIMARY KEY,
     borrowed_item_id INT NOT NULL,
-    return_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    returned_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     status ENUM('pending', 'approved') NOT NULL DEFAULT 'pending',
     user_id INT NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,

@@ -1,7 +1,7 @@
 <?php layout('app'); ?>
 
 <?php section('title'); ?>
-    Renewed Items
+Renewed Items
 <?php endsection(); ?>
 
 <?php section('content'); ?>
@@ -9,15 +9,15 @@
     <div class="row justify-content-center">
         <div class="">
             <div class="card">
-                
+
                 <div class="card-body">
-                <div class="card-title">
-                    <div class="row align-items-center">
-                        <div class="col text-left">
-                            <h4>Renewed Items</h4>
+                    <div class="card-title">
+                        <div class="row align-items-center">
+                            <div class="col text-left">
+                                <h4>Renewed Items</h4>
+                            </div>
                         </div>
                     </div>
-                </div>
                     <table class="table table-sm text-sm text-capitalize">
                         <thead>
                             <tr>
@@ -27,7 +27,7 @@
                                 <th scope="col">Status</th>
                                 <th scope="col">Borrowed By</th>
                                 <th scope="col">Borrowed Deadline</th>
-                                <?php if(admin()): ?>
+                                <?php if (admin()): ?>
                                     <th scope="col" width="10%">Actions</th>
                                 <?php endif; ?>
                             </tr>
@@ -40,12 +40,12 @@
                                     <td><?php echo ($ri['category_name']); ?></td>
                                     <td>
                                         <?php
-                                            $statusClass = '';
-                                            if ($ri['status'] === 'pending') {
-                                                $statusClass = 'text-bg-warning';
-                                            } elseif ($ri['status'] === 'approved') {
-                                                $statusClass = 'text-bg-success';
-                                            }
+                                        $statusClass = '';
+                                        if ($ri['status'] === 'pending') {
+                                            $statusClass = 'text-bg-warning';
+                                        } elseif ($ri['status'] === 'approved') {
+                                            $statusClass = 'text-bg-success';
+                                        }
                                         ?>
                                         <span class="badge rounded-pill <?php echo $statusClass; ?>"><?php echo ($ri['status']); ?></span>
                                     </td>
@@ -59,10 +59,10 @@
                                             <?php echo ($ri['borrowed_deadline']); ?>
                                         <?php endif ?>
                                     </td>
-                                    <?php if(admin()): ?>
+                                    <?php if (admin()): ?>
                                         <td>
                                             <div>
-                                                <button 
+                                                <button
                                                     type="button"
                                                     class="btn btn-success btn-sm"
                                                     data-bs-toggle="modal"
@@ -70,8 +70,7 @@
                                                     data-id="<?php echo $ri['id']; ?>"
                                                     data-item-id="<?php echo $ri['item_id']; ?>"
                                                     data-status="<?php echo ($ri['status']); ?>"
-                                                    data-borrowed-deadline="<?php echo ($ri['borrowed_deadline']); ?>"
-                                                >
+                                                    data-borrowed-deadline="<?php echo ($ri['borrowed_deadline']); ?>">
                                                     Edit
                                                 </button>
                                             </div>
@@ -168,9 +167,9 @@
 
 <?php section('scripts'); ?>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         var editRenewedItemModal = document.getElementById('editRenewedItemModal');
-        editRenewedItemModal.addEventListener('show.bs.modal', function (event) {
+        editRenewedItemModal.addEventListener('show.bs.modal', function(event) {
             var button = event.relatedTarget;
             var id = button.getAttribute('data-id');
             var status = button.getAttribute('data-status');
@@ -185,24 +184,29 @@
         });
 
         var editReturnedItemForm = document.getElementById('editReturnedItemForm');
-        editReturnedItemForm.addEventListener('submit', function (event) {
+        editReturnedItemForm.addEventListener('submit', function(event) {
             event.preventDefault();
             var formData = new FormData(editReturnedItemForm);
             console.log(formData);
             var id = document.getElementById('editRenewedItemId').value;
             fetch('/renewed-items/' + id + '/update', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    location.reload(); // Reload the page to see the updated item
-                } else {
-                    alert(data.message);
-                }
-            })
-            .catch(error => console.error('Error:', error));
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        var modal = bootstrap.Modal.getInstance(editRenewedItemModal);
+                        modal.hide();
+                        setTimeout(() => {
+                            alert(data.message);
+                            location.reload(); // Reload the page to see the new item
+                        }, 200);
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
         });
 
 

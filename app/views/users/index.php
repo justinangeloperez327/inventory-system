@@ -1,7 +1,7 @@
 <?php layout('app'); ?>
 
 <?php section('title'); ?>
-    Users
+Users
 <?php endsection(); ?>
 
 <?php section('content'); ?>
@@ -16,7 +16,7 @@
                                 <h4>Users</h4>
                             </div>
                             <div class="col-auto">
-                                <a class="btn btn-primary btn-sm" href="users/create" >New</a>
+                                <a class="btn btn-primary btn-sm" href="users/create">New</a>
                             </div>
                         </div>
                     </div>
@@ -42,11 +42,11 @@
                                     <td>
                                         <img src="<?php echo $user['qr_code']; ?>" alt="QR Code" style="width: 3rem;" />
                                     </td>
-                                    <td><?php echo $user['default_password'];?></td>
+                                    <td><?php echo $user['default_password']; ?></td>
                                     <td>
                                         <button type="button" class="btn btn-danger text-white btn-sm" onclick="generateQrCode(<?php echo $user['id']; ?>)">Generate QR</button>
                                         <button type="button" class="btn btn-success text-white btn-sm" onclick="passwordReset(<?php echo $user['id']; ?>)">Password Reset</button>
-                                        <a type="button" href="users/<?php echo $user['id']; ?>/logs" class="btn btn-secondary text-white btn-sm mt-1">View Logs</a>  
+                                        <a type="button" href="users/<?php echo $user['id']; ?>/logs" class="btn btn-secondary text-white btn-sm mt-1">View Logs</a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -102,35 +102,33 @@
 <?php section('scripts'); ?>
 
 <script>
-
-
     function generateQrCode(id) {
         fetch('/generate-qr-code/' + id, {
-            method: 'GET'
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                location.href = '/users';
-            } else {
-                alert(data.message);
-            }
-        })
-        .catch(error => console.error('Error:', error));
+                method: 'GET'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.href = '/users';
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => console.error('Error:', error));
     }
 
     function passwordReset(id) {
         fetch('/password-reset/' + id, {
-            method: 'GET'
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert(data.message);
-            } else {
-                alert(data.message);
-            }
-        });
+                method: 'GET'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert(data.message);
+                }
+            });
     }
 </script>
 

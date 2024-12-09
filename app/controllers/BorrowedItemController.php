@@ -23,6 +23,8 @@ class BorrowedItemController extends Controller
 
     public function index()
     {
+        $borrowedDate = $_GET['borrowed_date'] ?? null;
+
         $borrowedItems = BorrowedItem::leftJoin('items', 'borrowed_items.item_id', '=', 'items.id')
             ->leftJoin('categories', 'items.category_id', '=', 'categories.id')
             ->leftJoin('users', 'borrowed_items.user_id', '=', 'users.id')
@@ -39,13 +41,18 @@ class BorrowedItemController extends Controller
             $borrowedItems->where('borrowed_items.user_id', '=', userId());
         }
 
+        if ($borrowedDate) {
+            $borrowedItems->whereDate('borrowed_items.borrowed_date', $borrowedDate);
+        }
+
         $borrowedItems = $borrowedItems->paginate(10);
 
         $items = Item::all();
 
         View::render('borrowed-items/index', [
             'borrowedItems' => $borrowedItems,
-            'items' => $items
+            'items' => $items,
+            'borrowedDate' => $borrowedDate,
         ]);
     }
 
@@ -123,6 +130,14 @@ class BorrowedItemController extends Controller
                 ]);
 
                 Response::json(['success' => true, 'message' => 'Item rejected successfully']);
+            }
+
+            if ($_POST['status'] === 'pending') {
+                BorrowedItem::update($id, [
+                    'status' => 'pending',
+                ]);
+
+                Response::json(['success' => true, 'message' => 'Item updated successfully']);
             }
         } catch (Exception $e) {
             Response::json(['success' => false, 'message' => 'Error updating BorrowedItem: ' . $e->getMessage()], 500);

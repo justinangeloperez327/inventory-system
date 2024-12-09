@@ -22,6 +22,8 @@ class ReportController extends Controller
 
     public function index()
     {
+        $search = $_GET['search'] ?? null;
+
         $borrowedItems = BorrowedItem::leftJoin('items', 'borrowed_items.item_id', '=', 'items.id')
             ->leftJoin('returned_items', 'borrowed_items.id', '=', 'returned_items.borrowed_item_id')
             ->leftJoin('users', 'borrowed_items.user_id', '=', 'users.id')
@@ -34,15 +36,23 @@ class ReportController extends Controller
                 'users.name AS user_name',
                 'returned_items.returned_date',
             ])
+            ->whereAny([
+                ['items.name', 'LIKE', "%$search%"],
+                ['categories.name', 'LIKE', "%$search%"],
+                ['users.name', 'LIKE', "%$search%"],
+            ])
             ->get();
 
         View::render('reports/index', [
             'borrowedItems' => $borrowedItems,
+            'search' => $search,
         ]);
     }
 
     public function exportToExcel()
     {
+        $search = $_GET['search'] ?? null;
+
         $data = BorrowedItem::leftJoin('items', 'borrowed_items.item_id', '=', 'items.id')
             ->leftJoin('returned_items', 'borrowed_items.id', '=', 'returned_items.borrowed_item_id')
             ->leftJoin('users', 'borrowed_items.user_id', '=', 'users.id')
@@ -54,6 +64,15 @@ class ReportController extends Controller
                 'categories.name AS category_name',
                 'users.name AS user_name',
                 'returned_items.returned_date',
+            ])
+            ->whereAny([
+                ['items.name', 'LIKE', "%$search%"],
+                ['categories.name', 'LIKE', "%$search%"],
+                ['users.name', 'LIKE', "%$search%"],
+            ])->whereAny([
+                ['items.name', 'LIKE', "%$search%"],
+                ['categories.name', 'LIKE', "%$search%"],
+                ['users.name', 'LIKE', "%$search%"],
             ])
             ->get();
 

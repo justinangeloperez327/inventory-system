@@ -20,31 +20,43 @@ class AttendanceController extends Controller
 
     public function index()
     {
-        $attendance = Attendance::leftJoin('users', 'attendance.user_id', '=', 'users.id')
-            ->where('created_at', '>=', today())
+        $searchDate = $_GET['search_date'] ?? today();
+
+        $query = Attendance::leftJoin('users', 'attendance.user_id', '=', 'users.id')
             ->select([
                 'attendance.*',
                 'users.name AS user_name',
-            ])
-            ->paginate(10);
+            ]);
+
+        if ($searchDate) {
+            $query->whereDate('attendance.date', $searchDate);
+        }
+
+        $attendance = $query->paginate(10);
 
         View::render('attendance/index', [
             'attendance' => $attendance,
+            'searchDate' => $searchDate,
         ]);
     }
 
     public function exportToExcel()
     {
+        $searchDate = $_GET['search_date'] ?? null;
+
         $data = Attendance::leftJoin('users', 'attendance.user_id', '=', 'users.id')
-            ->where('created_at', '>=', today())
             ->select([
                 'attendance.id',
                 'users.name AS user_name',
                 'attendance.date',
                 'attendance.time_in',
                 'attendance.time_out',
-            ])
-            ->get();
+            ]);
+
+        if ($searchDate) {
+            $data->whereDate('attendance.date', $searchDate);
+        }
+        $data->get();
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();

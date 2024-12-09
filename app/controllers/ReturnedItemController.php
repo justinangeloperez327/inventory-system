@@ -23,6 +23,8 @@ class ReturnedItemController extends Controller
 
     public function index()
     {
+        $returnedDate = $_GET['returned_date'] ?? null;
+
         $returnedItems = ReturnedItem::leftJoin('borrowed_items', 'returned_items.borrowed_item_id', '=', 'borrowed_items.id')
             ->leftJoin('items', 'borrowed_items.item_id', '=', 'items.id')
             ->leftJoin('categories', 'items.category_id', '=', 'categories.id')
@@ -40,13 +42,18 @@ class ReturnedItemController extends Controller
             $returnedItems->where('returned_items.user_id', '=', userId());
         }
 
+        if ($returnedDate) {
+            $returnedItems->whereDate('returned_items.returned_date', $returnedDate);
+        }
+
         $returnedItems = $returnedItems->paginate(10);
 
         $items = Item::all();
 
         View::render('returned-items/index', [
             'returnedItems' => $returnedItems,
-            'items' => $items
+            'items' => $items,
+            'returnedDate' => $returnedDate,
         ]);
     }
 

@@ -1,7 +1,7 @@
 <?php layout('app'); ?>
 
 <?php section('title'); ?>
-    Borrowed Items
+Borrowed Items
 <?php endsection(); ?>
 
 <?php section('content'); ?>
@@ -9,15 +9,19 @@
     <div class="row justify-content-center">
         <div class="">
             <div class="card">
-                
+
                 <div class="card-body">
-                <div class="card-title">
-                    <div class="row align-items-center">
-                        <div class="col text-left">
-                            <h4>Borrowed Items</h4>
+                    <div class="card-title">
+                        <div class="row align-items-center">
+                            <div class="col text-left">
+                                <h4>Borrowed Items</h4>
+                            </div>
+                            <div class="col-auto">
+                                <label for="borrowed-date" class="form-label">Borrowed Date</label>
+                                <input type="date" class="form-control form-control-sm" id="borrowed-date" placeholder="Date" value="<?php echo $borrowedDate; ?>">
+                            </div>
                         </div>
                     </div>
-                </div>
                     <table class="table table-sm table-responsive text-sm">
                         <thead>
                             <tr>
@@ -39,14 +43,14 @@
                                     <td><?php echo ($bi['category_name']); ?></td>
                                     <td>
                                         <?php
-                                            $statusClass = '';
-                                            if ($bi['status'] === 'pending') {
-                                                $statusClass = 'text-bg-warning';
-                                            } elseif ($bi['status'] === 'approved') {
-                                                $statusClass = 'text-bg-success';
-                                            } elseif ($bi['status'] === 'rejected') {
-                                                $statusClass = 'text-bg-danger';
-                                            }
+                                        $statusClass = '';
+                                        if ($bi['status'] === 'pending') {
+                                            $statusClass = 'text-bg-warning';
+                                        } elseif ($bi['status'] === 'approved') {
+                                            $statusClass = 'text-bg-success';
+                                        } elseif ($bi['status'] === 'rejected') {
+                                            $statusClass = 'text-bg-danger';
+                                        }
                                         ?>
                                         <span class="badge rounded-pill <?php echo $statusClass; ?>"><?php echo ($bi['status']); ?></span>
                                     </td>
@@ -67,9 +71,9 @@
                                         <?php endif ?>
                                     </td>
                                     <td>
-                                    
-                                        <?php if(admin()): ?>
-                                            <button 
+
+                                        <?php if (admin()): ?>
+                                            <button
                                                 type="button"
                                                 class="btn btn-success btn-sm"
                                                 data-bs-toggle="modal"
@@ -79,20 +83,18 @@
                                                 data-item-name="<?php echo ($bi['item_name']); ?>"
                                                 data-status="<?php echo ($bi['status']); ?>"
                                                 data-borrowed-date="<?php echo ($bi['borrowed_date']); ?>"
-                                                data-borrowed-deadline="<?php echo ($bi['borrowed_deadline']); ?>"
-                                            >
+                                                data-borrowed-deadline="<?php echo ($bi['borrowed_deadline']); ?>">
                                                 Edit
                                             </button>
-                                        <?php else:?>
+                                        <?php else: ?>
                                             <?php if ($bi['status'] == 'pending'): ?>
-                                                <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" 
-                                                    data-bs-target="#cancelBorrowedItemModal" data-id="<?php echo $bi['id']; ?>"
-                                                >
+                                                <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                                    data-bs-target="#cancelBorrowedItemModal" data-id="<?php echo $bi['id']; ?>">
                                                     Cancel
                                                 </button>
                                             <?php endif; ?>
                                         <?php endif; ?>
-                                        <?php if(!admin()): ?>
+                                        <?php if (!admin()): ?>
                                             <?php if ($bi['status'] == 'approved'): ?>
                                                 <div class="d-grid gap-2 d-md-block justify-content-end">
                                                     <?php if (!$bi['returned_id']): ?>
@@ -185,7 +187,7 @@
                     </div>
                     <div class="mb-3" id="deadlineContainer">
                         <label for="editBorrowedItemBorrowedDeadline" class="form-label">Borrowed Deadline</label>
-                        <input type="date" class="form-control" id="editBorrowedItemBorrowedDeadline" name="borrowed_deadline" >
+                        <input type="date" class="form-control" id="editBorrowedItemBorrowedDeadline" name="borrowed_deadline">
                     </div>
                     <button type="submit" class="btn btn-primary btn-sm">Save Changes</button>
                 </form>
@@ -217,34 +219,42 @@
 
 <?php section('scripts'); ?>
 <script>
+    document.getElementById('borrowed-date').addEventListener('change', function() {
+        const borrowedDate = this.value;
+        const url = new URL(window.location.href);
+        url.searchParams.set('borrowed_date', borrowedDate);
+        window.history.pushState({}, '', url);
+        location.reload();
+    });
+
     function handleReturn(id) {
         fetch('/returned-items/' + id, {
-            method: 'GET'
-        }).then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                location.href = '/returned-items';
-            } else {
-                alert(data.message);
-            }
-        })
-        .catch(error => console.error('Error:', error));
+                method: 'GET'
+            }).then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.href = '/returned-items';
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => console.error('Error:', error));
     }
 
     function handleRenew(id) {
         fetch('/renewed-items/' + id, {
-            method: 'GET'
-        }).then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                location.href = '/renewed-items';
-            } else {
-                alert(data.message);
-            }
-        })
-        .catch(error => console.error('Error:', error));
+                method: 'GET'
+            }).then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.href = '/renewed-items';
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => console.error('Error:', error));
     }
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         var statusSelect = document.getElementById('editBorrowedItemStatus');
         var deadlineContainer = document.getElementById('deadlineContainer');
 
@@ -266,7 +276,7 @@
         toggleDeadlineContainer();
 
         var editBorrowedItemModal = document.getElementById('editBorrowedItemModal');
-        editBorrowedItemModal.addEventListener('show.bs.modal', function (event) {
+        editBorrowedItemModal.addEventListener('show.bs.modal', function(event) {
 
             var button = event.relatedTarget;
             var id = button.getAttribute('data-id');
@@ -285,7 +295,7 @@
         });
 
         var cancelBorrowedItemModal = document.getElementById('cancelBorrowedItemModal');
-        cancelBorrowedItemModal.addEventListener('show.bs.modal', function (event) {
+        cancelBorrowedItemModal.addEventListener('show.bs.modal', function(event) {
             var button = event.relatedTarget;
             var id = button.getAttribute('data-id');
 
@@ -295,43 +305,48 @@
 
 
         var editBorrowedItemForm = document.getElementById('editBorrowedItemForm');
-        editBorrowedItemForm.addEventListener('submit', function (event) {
+        editBorrowedItemForm.addEventListener('submit', function(event) {
             event.preventDefault();
             var formData = new FormData(editBorrowedItemForm);
             var id = document.getElementById('editBorrowedItemId').value;
             fetch('/borrowed-items/' + id + '/update', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    location.reload(); // Reload the page to see the updated item
-                } else {
-                    alert(data.message);
-                }
-            })
-            .catch(error => console.error('Error:', error));
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        var modal = bootstrap.Modal.getInstance(editBorrowedItemModal);
+                        modal.hide();
+                        setTimeout(() => {
+                            alert(data.message);
+                            location.reload(); // Reload the page to see the new item
+                        }, 200);
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
         });
 
         var deleteItemForm = document.getElementById('deleteItemForm');
-        deleteItemForm.addEventListener('submit', function (event) {
+        deleteItemForm.addEventListener('submit', function(event) {
             event.preventDefault();
             var formData = new FormData(deleteItemForm);
             var id = document.getElementById('deleteItemId').value;
             fetch('/borrowed-items/' + id + '/delete', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    location.reload(); // Reload the page to see the updated list
-                } else {
-                    alert(data.message);
-                }
-            })
-            .catch(error => console.error('Error:', error));
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload(); // Reload the page to see the updated list
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
         });
     });
 </script>

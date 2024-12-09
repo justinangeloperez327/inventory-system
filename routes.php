@@ -28,6 +28,8 @@ Route::get('items', [ItemController::class, 'index']);
 Route::post('items', [ItemController::class, 'create']);
 Route::post('items/{id}', [ItemController::class, 'update']);
 Route::post('items/{id}/delete', [ItemController::class, 'delete']);
+Route::post('items/{id}/restore', [ItemController::class, 'restore']);
+Route::get('items/archive', [ItemController::class, 'archive']);
 
 Route::get('borrowed-items', [BorrowedItemController::class, 'index']);
 Route::post('borrowed-items', [BorrowedItemController::class, 'create']);

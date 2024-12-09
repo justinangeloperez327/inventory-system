@@ -97,6 +97,13 @@ class RenewedItemController
                     ]);
                 }
 
+                if ($_POST['status'] === 'pending') {
+
+                    RenewedItem::update($id, [
+                        'status' => 'pending',
+                    ]);
+                }
+
                 Response::json(['success' => true, 'message' => 'Item updated successfully']);
             } else {
                 Response::json(['success' => false, 'message' => 'Item not found'], 404);

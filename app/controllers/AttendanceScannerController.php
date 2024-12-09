@@ -37,7 +37,7 @@ class AttendanceScannerController extends Controller
 
             if ($attendance) {
                 Attendance::update($attendance['id'], [
-                    'time_out' => date('H:i:s'),
+                    'time_out' => (new \DateTime('now', new \DateTimeZone('Asia/Manila')))->format('H:i:s'),
                 ]);
 
                 Response::json([
@@ -52,7 +52,7 @@ class AttendanceScannerController extends Controller
         Attendance::create([
             'user_id' => $user['id'],
             'date' => date('Y-m-d'),
-            'time_in' => date('H:i:s'),
+            'time_in' => (new \DateTime('now', new \DateTimeZone('Asia/Manila')))->format('H:i:s'),
         ]);
 
         Response::json([

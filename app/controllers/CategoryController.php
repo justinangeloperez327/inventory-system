@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Category;
+use app\models\Item;
 use core\Controller;
 use core\Redirect;
 use core\Response;
@@ -50,8 +51,8 @@ class CategoryController extends Controller
     public function update($id)
     {
         try {
-            $item = Category::find($id);
-            if ($item) {
+            $category = Category::find($id);
+            if ($category) {
 
                 $name = $_POST['name'];
                 $parentId = isset($_POST['parent_id']) ? $_POST['parent_id'] : null;
@@ -73,8 +74,15 @@ class CategoryController extends Controller
     public function delete($id)
     {
         try {
-            $item = Category::find($id);
-            if ($item) {
+            $category = Category::find($id);
+
+            $items = Item::where('category_id', '=', $id)->get();
+
+            if (count($items) > 0) {
+                Response::json(['success' => false, 'message' => 'Category cannot be deleted because it has items associated with it'], 400);
+            }
+
+            if ($category) {
                 Category::delete($id);
                 Response::json(['success' => true, 'message' => 'Category deleted successfully']);
             } else {

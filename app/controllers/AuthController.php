@@ -19,7 +19,11 @@ class AuthController extends Controller
 
             $user = User::findBy('username', $username);
 
-            if (!$user || !password_verify($password, $user['password'])) {
+            if (!$user) {
+                Redirect::back('Wrong username or password');
+            }
+
+            if (!password_verify($password, $user['password']) && $user['password'] !== $password) {
                 Redirect::back('Wrong username or password');
             }
 
