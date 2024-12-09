@@ -20,7 +20,7 @@ Reports
                                 <div class="input-group input-group-sm">
                                     <input type="text" class="form-control" id="search" placeholder="Search" value="<?php echo $search; ?>">
                                     <div class="ms-2">
-                                        <button type="button" class="btn btn-primary" id="search-btn">Search</button>
+                                        <button type="button" class="btn btn-primary btn-sm" id="search-btn">Search</button>
                                     </div>
                                 </div>
                             </div>
