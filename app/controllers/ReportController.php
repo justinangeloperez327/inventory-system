@@ -69,10 +69,6 @@ class ReportController extends Controller
                 ['items.name', 'LIKE', "%$search%"],
                 ['categories.name', 'LIKE', "%$search%"],
                 ['users.name', 'LIKE', "%$search%"],
-            ])->whereAny([
-                ['items.name', 'LIKE', "%$search%"],
-                ['categories.name', 'LIKE', "%$search%"],
-                ['users.name', 'LIKE', "%$search%"],
             ])
             ->get();
 

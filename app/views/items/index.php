@@ -17,6 +17,14 @@ Items
                                 <h4>Items</h4>
                             </div>
                             <div class="col-auto">
+                                <div class="input-group input-group-sm">
+                                    <input type="text" class="form-control" id="search" placeholder="Search" value="<?php echo $search; ?>">
+                                    <div class="ms-2">
+                                        <button type="button" class="btn btn-primary" id="search-btn">Search</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-auto">
                                 <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addItemModal">New</button>
                             </div>
                         </div>
@@ -233,6 +241,11 @@ Items
 <?php section('scripts'); ?>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('search-btn').addEventListener('click', function() {
+            const search = document.getElementById('search').value;
+            window.location.href = `/items?search=${search}`;
+        });
+
         var editItemModal = document.getElementById('editItemModal');
 
         editItemModal.addEventListener('show.bs.modal', function(event) {

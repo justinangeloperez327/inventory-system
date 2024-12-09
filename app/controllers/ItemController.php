@@ -21,14 +21,33 @@ class ItemController extends Controller
 
     public function index()
     {
+        $search = $_GET['search'] ?? null;
+
+
         $items = Item::leftJoin('categories', 'items.category_id', '=', 'categories.id')
-            ->select(['items.*', 'categories.name AS category_name'])
+            ->select([
+                'items.id',
+                'items.name',
+                'items.quantity',
+                'categories.id As category_id',
+                'categories.name As category_name'
+            ])
+
             ->orderBy('id', 'desc')
-            ->paginate(10);
+            ->whereAny([
+                ['items.name', 'LIKE', "%$search%"],
+                // ['categories.name', 'LIKE', "%$search%"],
+                ['items.quantity', 'LIKE', "%$search%"],
+            ])
+            ->paginate();
 
         $categories = Category::orderBy('name')->get();
 
-        View::render('items/index', ['items' => $items, 'categories' => $categories]);
+        View::render('items/index', [
+            'items' => $items,
+            'categories' => $categories,
+            'search' => $search
+        ]);
     }
 
     public function archive()
