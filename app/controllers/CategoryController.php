@@ -37,6 +37,12 @@ class CategoryController extends Controller
             $name = $_POST['name'];
             $parentId = isset($_POST['parent_id']) ? $_POST['parent_id'] : null;
 
+            $existingCategory = Category::where('name', '=', $name)->first();
+
+            if ($existingCategory) {
+                Response::json(['success' => false, 'message' => 'Category already exists'], 400);
+            }
+
             Category::create([
                 'name' => $name,
                 'parent_id' => $parentId,
