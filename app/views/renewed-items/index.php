@@ -16,6 +16,10 @@ Renewed Items
                             <div class="col text-left">
                                 <h4>Renewed Items</h4>
                             </div>
+                            <div class="col-auto">
+                                <label for="borrowed-date" class="form-label">Borrowed Date</label>
+                                <input type="date" class="form-control form-control-sm" id="returned-date" placeholder="Date" value="<?php echo $borrowedDate; ?>">
+                            </div>
                         </div>
                     </div>
                     <div class="table-responsive">

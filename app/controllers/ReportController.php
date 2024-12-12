@@ -76,23 +76,23 @@ class ReportController extends Controller
         $sheet = $spreadsheet->getActiveSheet();
 
         // Set the header row
-        $sheet->setCellValue('A1', 'ID');
-        $sheet->setCellValue('B1', 'Item Name');
-        $sheet->setCellValue('C1', 'Category');
-        $sheet->setCellValue('D1', 'Borrowed By');
-        $sheet->setCellValue('E1', 'Borrowed Date');
-        $sheet->setCellValue('F1', 'Returned Date');
+
+        $sheet->setCellValue('A1', 'Item Name');
+        $sheet->setCellValue('B1', 'Category');
+        $sheet->setCellValue('C1', 'Borrowed By');
+        $sheet->setCellValue('D1', 'Borrowed Date');
+        $sheet->setCellValue('E1', 'Returned Date');
 
         // Populate the data rows
         $row = 2;
         foreach ($data as $ri) {
-            $sheet->setCellValue('A' . $row, $ri['id']);
-            $sheet->setCellValue('B' . $row, $ri['item_name']);
-            $sheet->setCellValue('C' . $row, $ri['category_name']);
-            $sheet->setCellValue('D' . $row, $ri['user_name']);
-            $sheet->setCellValue('E' . $row, $ri['borrowed_date']);
-            $sheet->setCellValue('F' . $row, $ri['returned_date']);
-            $sheet->setCellValue('G' . $row, $ri['status']);
+
+            $sheet->setCellValue('A' . $row, $ri['item_name']);
+            $sheet->setCellValue('B' . $row, $ri['category_name']);
+            $sheet->setCellValue('C' . $row, $ri['user_name']);
+            $sheet->setCellValue('D' . $row, $ri['borrowed_date']);
+            $sheet->setCellValue('E' . $row, $ri['returned_date']);
+            $sheet->setCellValue('F' . $row, $ri['status']);
             $row++;
         }
 

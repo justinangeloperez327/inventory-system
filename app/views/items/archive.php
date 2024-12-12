@@ -21,7 +21,7 @@ Archive Items
                     <table class="table table-sm text-capitalize">
                         <thead>
                             <tr>
-                                <th scope="col">ID</th>
+
                                 <th scope="col">Name</th>
                                 <th scope="col">Category</th>
                                 <th scope="col">
@@ -37,7 +37,7 @@ Archive Items
                         <tbody class="table-group-divider">
                             <?php foreach ($items['data'] as $item): ?>
                                 <tr>
-                                    <td scope="row"><?php echo ($item['id']); ?></td>
+
                                     <td><?php echo ($item['name']); ?></td>
                                     <td><?php echo ($item['category_name']); ?></td>
                                     <td>

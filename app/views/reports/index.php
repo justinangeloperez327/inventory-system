@@ -33,7 +33,6 @@ Reports
                         <table class="table table-sm text-sm text-capitalize">
                             <thead>
                                 <tr>
-                                    <th scope="col">ID</th>
                                     <th scope="col">Item</th>
                                     <th scope="col">Category</th>
                                     <th scope="col">Borrowed By</th>
@@ -45,7 +44,7 @@ Reports
                             <tbody class="table-group-divider">
                                 <?php foreach ($borrowedItems as $bi): ?>
                                     <tr>
-                                        <td scope="row"><?php echo ($bi['id']); ?></td>
+
                                         <td><?php echo ($bi['item_name']); ?></td>
                                         <td><?php echo ($bi['category_name']); ?></td>
                                         <td><?php echo ($bi['user_name']); ?></td>

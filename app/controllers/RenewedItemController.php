@@ -21,6 +21,8 @@ class RenewedItemController
 
     public function index()
     {
+        $borrowedDate = $_GET['borrowed_date'] ?? null;
+
         $renewedItems = RenewedItem::leftJoin('borrowed_items', 'renewed_items.borrowed_item_id', '=', 'borrowed_items.id')
             ->leftJoin('items', 'borrowed_items.item_id', '=', 'items.id')
             ->leftJoin('categories', 'items.category_id', '=', 'categories.id')
@@ -33,7 +35,8 @@ class RenewedItemController
                 'users.name AS user_name',
                 'borrowed_items.borrowed_date',
                 'borrowed_items.borrowed_deadline',
-            ]);
+            ])
+            ->whereDate('borrowed_items.borrowed_date', $borrowedDate);
 
         if (!admin()) {
             $renewedItems->where('renewed_items.user_id', '=', userId());
@@ -44,7 +47,8 @@ class RenewedItemController
 
         View::render('renewed-items/index', [
             'renewedItems' => $renewedItems,
-            'items' => $items
+            'items' => $items,
+            'borrowedDate' => $borrowedDate,
         ]);
     }
 
