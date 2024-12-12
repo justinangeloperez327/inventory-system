@@ -377,12 +377,18 @@ class QueryBuilder
 
 
         // Count total records (for pagination)
+        // Count total records (for pagination)
         $countSql = "SELECT COUNT(*) as total FROM renewed_items 
-             LEFT JOIN borrowed_items ON renewed_items.borrowed_item_id = borrowed_items.id
-             WHERE borrowed_items.borrowed_date = :borrowedDate";
+            LEFT JOIN borrowed_items ON renewed_items.borrowed_item_id = borrowed_items.id";
+
+        if ($borrowedDate) {
+            $countSql .= " WHERE borrowed_items.borrowed_date = :borrowedDate";
+        }
 
         $countStmt = $this->pdo->prepare($countSql);
-        $countStmt->bindParam(':borrowedDate', $borrowedDate, PDO::PARAM_STR);
+        if ($borrowedDate) {
+            $countStmt->bindParam(':borrowedDate', $borrowedDate, PDO::PARAM_STR);
+        }
         $countStmt->execute();
         $totalRecords = $countStmt->fetchColumn();
 
@@ -398,22 +404,26 @@ class QueryBuilder
                 borrowed_items.borrowed_date,
                 borrowed_items.borrowed_deadline
             FROM 
-            renewed_items
+                renewed_items
             LEFT JOIN 
-            borrowed_items ON renewed_items.borrowed_item_id = borrowed_items.id
+                borrowed_items ON renewed_items.borrowed_item_id = borrowed_items.id
             LEFT JOIN 
-            items ON borrowed_items.item_id = items.id
+                items ON borrowed_items.item_id = items.id
             LEFT JOIN
-            categories ON categories.id = items.category_id
+                categories ON categories.id = items.category_id
             LEFT JOIN
-            users ON users.id = renewed_items.user_id
-            WHERE 
-            borrowed_items.borrowed_date = :borrowedDate
+                users ON users.id = renewed_items.user_id";
 
-            LIMIT :perPage OFFSET :offset";
+        if ($borrowedDate) {
+            $sql .= " WHERE borrowed_items.borrowed_date = :borrowedDate";
+        }
+
+        $sql .= " LIMIT :perPage OFFSET :offset";
 
         $stmt = $this->pdo->prepare($sql);
-        $stmt->bindParam(':borrowedDate', $borrowedDate, PDO::PARAM_STR);
+        if ($borrowedDate) {
+            $stmt->bindParam(':borrowedDate', $borrowedDate, PDO::PARAM_STR);
+        }
         $stmt->bindParam(':perPage', $perPage, PDO::PARAM_INT);
         $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
         $stmt->execute();
