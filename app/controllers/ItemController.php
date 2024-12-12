@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\Category;
 use app\models\Item;
 use core\Controller;
+use core\QueryBuilder;
 use core\Redirect;
 use core\Response;
 use core\View;
@@ -24,22 +25,8 @@ class ItemController extends Controller
         $search = $_GET['search'] ?? null;
 
 
-        $items = Item::leftJoin('categories', 'items.category_id', '=', 'categories.id')
-            ->select([
-                'items.id',
-                'items.name',
-                'items.quantity',
-                'categories.id As category_id',
-                'categories.name As category_name'
-            ])
-
-            ->orderBy('id', 'desc')
-            ->whereAny([
-                ['items.name', 'LIKE', "%$search%"],
-                // ['categories.name', 'LIKE', "%$search%"],
-                ['items.quantity', 'LIKE', "%$search%"],
-            ])
-            ->paginate();
+        $queryBuilder = new QueryBuilder();
+        $items = $queryBuilder->getPaginatedItems($search);
 
         $categories = Category::orderBy('name')->get();
 

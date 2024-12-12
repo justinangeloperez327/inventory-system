@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\BorrowedItem;
 use app\models\Item;
 use app\models\RenewedItem;
+use core\QueryBuilder;
 use core\Redirect;
 use core\Response;
 use core\View;
@@ -23,26 +24,8 @@ class RenewedItemController
     {
         $borrowedDate = $_GET['borrowed_date'] ?? null;
 
-        $renewedItems = RenewedItem::leftJoin('borrowed_items', 'renewed_items.borrowed_item_id', '=', 'borrowed_items.id')
-            ->leftJoin('items', 'borrowed_items.item_id', '=', 'items.id')
-            ->leftJoin('categories', 'items.category_id', '=', 'categories.id')
-            ->leftJoin('users', 'renewed_items.user_id', '=', 'users.id')
-            ->select([
-                'renewed_items.*',
-                'items.name AS item_name',
-                'borrowed_items.item_id as item_id',
-                'categories.name AS category_name',
-                'users.name AS user_name',
-                'borrowed_items.borrowed_date',
-                'borrowed_items.borrowed_deadline',
-            ])
-            ->whereDate('borrowed_items.borrowed_date', $borrowedDate);
-
-        if (!admin()) {
-            $renewedItems->where('renewed_items.user_id', '=', userId());
-        }
-
-        $renewedItems = $renewedItems->paginate(10);
+        $queryBuilder = new QueryBuilder();
+        $renewedItems = $queryBuilder->getRenewedItems($borrowedDate);
         $items = Item::all();
 
         View::render('renewed-items/index', [

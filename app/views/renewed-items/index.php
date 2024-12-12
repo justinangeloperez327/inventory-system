@@ -18,7 +18,7 @@ Renewed Items
                             </div>
                             <div class="col-auto">
                                 <label for="borrowed-date" class="form-label">Borrowed Date</label>
-                                <input type="date" class="form-control form-control-sm" id="returned-date" placeholder="Date" value="<?php echo $borrowedDate; ?>">
+                                <input type="date" class="form-control form-control-sm" id="borrowed-date" placeholder="Date" value="<?php echo $borrowedDate; ?>">
                             </div>
                         </div>
                     </div>
@@ -174,6 +174,13 @@ Renewed Items
 
 <?php section('scripts'); ?>
 <script>
+    document.getElementById('borrowed-date').addEventListener('change', function() {
+        const borrowedDate = this.value;
+        const url = new URL(window.location.href);
+        url.searchParams.set('borrowed_date', borrowedDate);
+        window.history.pushState({}, '', url);
+        location.reload();
+    });
     document.addEventListener('DOMContentLoaded', function() {
         var editRenewedItemModal = document.getElementById('editRenewedItemModal');
         editRenewedItemModal.addEventListener('show.bs.modal', function(event) {

@@ -367,4 +367,133 @@ class QueryBuilder
 
         return $this;
     }
+
+    public function getRenewedItems($borrowedDate)
+    {
+        // Pagination parameters
+        $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Current page
+        $perPage = 10; // Records per page
+        $offset = ($currentPage - 1) * $perPage; // Offset for SQL
+
+
+        // Count total records (for pagination)
+        $countSql = "SELECT COUNT(*) as total FROM renewed_items 
+             LEFT JOIN borrowed_items ON renewed_items.borrowed_item_id = borrowed_items.id
+             WHERE borrowed_items.borrowed_date = :borrowedDate";
+
+        $countStmt = $this->pdo->prepare($countSql);
+        $countStmt->bindParam(':borrowedDate', $borrowedDate, PDO::PARAM_STR);
+        $countStmt->execute();
+        $totalRecords = $countStmt->fetchColumn();
+
+        // Calculate total pages
+        $totalPages = ceil($totalRecords / $perPage);
+
+        // Fetch paginated data
+        $sql = "SELECT renewed_items.*, 
+                items.name AS item_name, 
+                borrowed_items.item_id as item_id,
+                categories.name AS category_name,
+                users.name AS user_name,
+                borrowed_items.borrowed_date,
+                borrowed_items.borrowed_deadline
+            FROM 
+            renewed_items
+            LEFT JOIN 
+            borrowed_items ON renewed_items.borrowed_item_id = borrowed_items.id
+            LEFT JOIN 
+            items ON borrowed_items.item_id = items.id
+            LEFT JOIN
+            categories ON categories.id = items.category_id
+            LEFT JOIN
+            users ON users.id = renewed_items.user_id
+            WHERE 
+            borrowed_items.borrowed_date = :borrowedDate
+
+            LIMIT :perPage OFFSET :offset";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':borrowedDate', $borrowedDate, PDO::PARAM_STR);
+        $stmt->bindParam(':perPage', $perPage, PDO::PARAM_INT);
+        $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Pagination links
+        $previousPageUrl = ($currentPage > 1) ? "?page=" . ($currentPage - 1) : null;
+        $nextPageUrl = ($currentPage < $totalPages) ? "?page=" . ($currentPage + 1) : null;
+
+        // Return response
+        return [
+            'data' => $results,
+            'total' => $totalRecords,
+            'per_page' => $perPage,
+            'current_page' => $currentPage,
+            'total_pages' => $totalPages,
+            'previous_page_url' => $previousPageUrl,
+            'next_page_url' => $nextPageUrl,
+            'start_item' => $offset + 1,
+            'end_item' => min($offset + $perPage, $totalRecords),
+        ];
+    }
+
+    public function getPaginatedItems($search)
+    {
+        $search = '%' . $search . '%';
+        // Pagination parameters
+        $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Current page
+        $perPage = 10; // Records per page
+        $offset = ($currentPage - 1) * $perPage; // Offset for SQL
+
+
+        // Count total records (for pagination)
+        $countSql = "SELECT COUNT(*) as total FROM items
+            LEFT JOIN categories ON items.category_id = categories.id
+             WHERE items.name LIKE :search 
+                OR items.quantity LIKE :search
+                OR categories.name LIKE :search";
+
+        $countStmt = $this->pdo->prepare($countSql);
+        $countStmt->bindParam(':search', $search, PDO::PARAM_STR);
+
+        $countStmt->execute();
+        $totalRecords = $countStmt->fetchColumn();
+
+        // Calculate total pages
+        $totalPages = ceil($totalRecords / $perPage);
+
+        // Fetch paginated data
+        $sql = "SELECT items.*, categories.name AS category_name
+            FROM items
+            LEFT JOIN categories ON items.category_id = categories.id
+            WHERE items.name LIKE :search 
+            OR items.quantity LIKE :search
+            OR categories.name LIKE :search
+            ORDER BY items.id DESC
+            LIMIT :perPage OFFSET :offset";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':search', $search, PDO::PARAM_STR);
+        $stmt->bindParam(':perPage', $perPage, PDO::PARAM_INT);
+        $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Pagination links
+        $previousPageUrl = ($currentPage > 1) ? "?page=" . ($currentPage - 1) : null;
+        $nextPageUrl = ($currentPage < $totalPages) ? "?page=" . ($currentPage + 1) : null;
+
+        // Return response
+        return [
+            'data' => $results,
+            'total' => $totalRecords,
+            'per_page' => $perPage,
+            'current_page' => $currentPage,
+            'total_pages' => $totalPages,
+            'previous_page_url' => $previousPageUrl,
+            'next_page_url' => $nextPageUrl,
+            'start_item' => $offset + 1,
+            'end_item' => min($offset + $perPage, $totalRecords),
+        ];
+    }
 }
