@@ -25,7 +25,9 @@ Items
                                 </div>
                             </div>
                             <div class="col-auto">
-                                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addItemModal">New</button>
+                                <?php if (admin()): ?>
+                                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addItemModal">New</button>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
