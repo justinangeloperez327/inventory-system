@@ -21,8 +21,11 @@ class CategoryController extends Controller
 
     public function index()
     {
+        $search = $_GET['search'] ?? null;
+
         $categories = Category::leftJoin('categories as parent', 'categories.parent_id', '=', 'parent.id')
             ->select(['categories.*', 'parent.name AS parent_name'])
+            ->where('categories.name', 'LIKE', "%$search%")
             ->orderBy('id', 'desc')
             ->paginate(10);
 

@@ -459,9 +459,10 @@ class QueryBuilder
         // Count total records (for pagination)
         $countSql = "SELECT COUNT(*) as total FROM items
             LEFT JOIN categories ON items.category_id = categories.id
-             WHERE items.name LIKE :search 
-                OR items.quantity LIKE :search
-                OR categories.name LIKE :search";
+            WHERE items.deleted_at IS NULL
+            AND (items.name LIKE :search 
+            OR items.quantity LIKE :search
+            OR categories.name LIKE :search)";
 
         $countStmt = $this->pdo->prepare($countSql);
         $countStmt->bindParam(':search', $search, PDO::PARAM_STR);
@@ -476,9 +477,10 @@ class QueryBuilder
         $sql = "SELECT items.*, categories.name AS category_name
             FROM items
             LEFT JOIN categories ON items.category_id = categories.id
-            WHERE items.name LIKE :search 
+            WHERE items.deleted_at IS NULL
+            AND (items.name LIKE :search 
             OR items.quantity LIKE :search
-            OR categories.name LIKE :search
+            OR categories.name LIKE :search)
             ORDER BY items.id DESC
             LIMIT :perPage OFFSET :offset";
 

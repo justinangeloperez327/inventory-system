@@ -29,6 +29,7 @@ Items
                             </div>
                         </div>
                     </div>
+
                     <div class="table-responsive">
                         <table class="table table-sm text-capitalize">
                             <thead>
@@ -85,6 +86,7 @@ Items
                             </tbody>
                         </table>
                     </div>
+
                     <!-- Pagination Links -->
                     <?php if ($items['total_pages'] > 1): ?>
                         <nav aria-label="Page navigation">

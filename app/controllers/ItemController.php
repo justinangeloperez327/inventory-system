@@ -62,7 +62,11 @@ class ItemController extends Controller
                 Response::json(['success' => false, 'message' => 'Name is required'], 400);
             }
 
-            $existingItem = Item::where('name', '=', $name)->where('category_id', '=', $categoryId)->first();
+            $existingItem = Item::where('name', '=', $name)->where('category_id', '=', $categoryId)->withTrashed()->first();
+
+            if ($existingItem && $existingItem['deleted_at'] !== null) {
+                Response::json(['success' => false, 'message' => 'Item already exists in archive'], 400);
+            }
 
             if (!$existingItem) {
                 Item::create([
