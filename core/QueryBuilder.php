@@ -508,4 +508,66 @@ class QueryBuilder
             'end_item' => min($offset + $perPage, $totalRecords),
         ];
     }
+
+    public function getPaginatedArchiveItems($search)
+    {
+        $search = '%' . $search . '%';
+        // Pagination parameters
+        $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Current page
+        $perPage = 10; // Records per page
+        $offset = ($currentPage - 1) * $perPage; // Offset for SQL
+
+
+        // Count total records (for pagination)
+        $countSql = "SELECT COUNT(*) as total FROM items
+            LEFT JOIN categories ON items.category_id = categories.id
+            WHERE items.deleted_at IS NOT NULL
+            AND (items.name LIKE :search 
+            OR items.quantity LIKE :search
+            OR categories.name LIKE :search)";
+
+        $countStmt = $this->pdo->prepare($countSql);
+        $countStmt->bindParam(':search', $search, PDO::PARAM_STR);
+
+        $countStmt->execute();
+        $totalRecords = $countStmt->fetchColumn();
+
+        // Calculate total pages
+        $totalPages = ceil($totalRecords / $perPage);
+
+        // Fetch paginated data
+        $sql = "SELECT items.*, categories.name AS category_name
+            FROM items
+            LEFT JOIN categories ON items.category_id = categories.id
+            WHERE items.deleted_at IS NOT NULL
+            AND (items.name LIKE :search 
+            OR items.quantity LIKE :search
+            OR categories.name LIKE :search)
+            ORDER BY items.id DESC
+            LIMIT :perPage OFFSET :offset";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':search', $search, PDO::PARAM_STR);
+        $stmt->bindParam(':perPage', $perPage, PDO::PARAM_INT);
+        $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Pagination links
+        $previousPageUrl = ($currentPage > 1) ? "?page=" . ($currentPage - 1) : null;
+        $nextPageUrl = ($currentPage < $totalPages) ? "?page=" . ($currentPage + 1) : null;
+
+        // Return response
+        return [
+            'data' => $results,
+            'total' => $totalRecords,
+            'per_page' => $perPage,
+            'current_page' => $currentPage,
+            'total_pages' => $totalPages,
+            'previous_page_url' => $previousPageUrl,
+            'next_page_url' => $nextPageUrl,
+            'start_item' => $offset + 1,
+            'end_item' => min($offset + $perPage, $totalRecords),
+        ];
+    }
 }

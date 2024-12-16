@@ -16,6 +16,23 @@ Archive Items
                             <div class="col text-left">
                                 <h4>Archive Items</h4>
                             </div>
+                            <div class="col-auto">
+                                <div class="input-group input-group-sm">
+                                    <input type="text" class="form-control" id="search" placeholder="Search" value="<?php echo $search; ?>">
+                                    <script>
+                                        document.getElementById('search').addEventListener('input', function() {
+                                            const regex = /[^a-zA-Z0-9 ]/g;
+                                            this.value = this.value.replace(regex, '');
+                                        });
+                                    </script>
+                                    <div class="ms-2">
+                                        <button type="button" class="btn btn-primary btn-sm" id="search-btn">Search</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addItemModal">New</button>
+                            </div>
                         </div>
                     </div>
                     <table class="table table-sm text-capitalize">
@@ -131,6 +148,10 @@ Archive Items
 <?php section('scripts'); ?>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('search-btn').addEventListener('click', function() {
+            const search = document.getElementById('search').value;
+            window.location.href = `/items/archive?search=${search}`;
+        });
 
         var restoreItemModal = document.getElementById('restoreItemModal');
 

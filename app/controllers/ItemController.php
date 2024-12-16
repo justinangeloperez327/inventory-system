@@ -24,10 +24,8 @@ class ItemController extends Controller
     {
         $search = $_GET['search'] ?? null;
 
-
         $queryBuilder = new QueryBuilder();
         $items = $queryBuilder->getPaginatedItems($search);
-
         $categories = Category::orderBy('name')->get();
 
         View::render('items/index', [
@@ -39,16 +37,13 @@ class ItemController extends Controller
 
     public function archive()
     {
-        $items = Item::leftJoin('categories', 'items.category_id', '=', 'categories.id')
-            ->select(['items.*', 'categories.name AS category_name'])
-            ->withTrashed()
-            ->where('deleted_at', 'IS NOT', null)
-            ->orderBy('id', 'desc')
-            ->paginate(10);
+        $search = $_GET['search'] ?? null;
 
+        $queryBuilder = new QueryBuilder();
+        $items = $queryBuilder->getPaginatedArchiveItems($search);
         $categories = Category::orderBy('name')->get();
 
-        View::render('items/archive', ['items' => $items, 'categories' => $categories]);
+        View::render('items/archive', ['items' => $items, 'categories' => $categories, 'search' => $search]);
     }
 
     public function create()

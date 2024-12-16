@@ -19,6 +19,12 @@ Reports
                             <div class="col-auto">
                                 <div class="input-group input-group-sm">
                                     <input type="text" class="form-control" id="search" placeholder="Search" value="<?php echo $search; ?>">
+                                    <script>
+                                        document.getElementById('search').addEventListener('input', function() {
+                                            const regex = /[^a-zA-Z0-9 ]/g;
+                                            this.value = this.value.replace(regex, '');
+                                        });
+                                    </script>
                                     <div class="ms-2">
                                         <button type="button" class="btn btn-primary btn-sm" id="search-btn">Search</button>
                                     </div>
