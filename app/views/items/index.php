@@ -19,12 +19,6 @@ Items
                             <div class="col-auto">
                                 <div class="input-group input-group-sm">
                                     <input type="text" class="form-control" id="search" placeholder="Search" value="<?php echo $search; ?>">
-                                    <script>
-                                        document.getElementById('search').addEventListener('input', function() {
-                                            const regex = /[^a-zA-Z0-9 ]/g;
-                                            this.value = this.value.replace(regex, '');
-                                        });
-                                    </script>
                                     <div class="ms-2">
                                         <button type="button" class="btn btn-primary btn-sm" id="search-btn">Search</button>
                                     </div>
@@ -249,6 +243,21 @@ Items
 <?php section('scripts'); ?>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('search').addEventListener('input', function() {
+            const regex = /[^a-zA-Z0-9 ]/g;
+            this.value = this.value.replace(regex, '');
+        });
+
+        document.getElementById('editItemName').addEventListener('input', function() {
+            const regex = /[^a-zA-Z0-9 ]/g;
+            this.value = this.value.replace(regex, '');
+        });
+
+        document.getElementById('itemName').addEventListener('input', function() {
+            const regex = /[^a-zA-Z0-9 ]/g;
+            this.value = this.value.replace(regex, '');
+        });
+
         document.getElementById('search-btn').addEventListener('click', function() {
             const search = document.getElementById('search').value;
             window.location.href = `/items?search=${search}`;
